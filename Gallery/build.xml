@@ -66,7 +66,8 @@
 			<arg line="-storepass ${ios.certificate.password}"/>
 			<arg line="${output.path}/Gallery.ipa"/>
 			<arg line="source/Gallery-app.xml"/>
-			<!--<arg line="icon48.png icon72.png icon128.png icon512.png"/>-->
+			<arg line="-C ${icon.path}"/>
+			<arg line="icon29.png icon48.png icon50.png icon57.png icon58.png icon72.png icon100.png icon114.png icon128.png icon144.png"/>
 			<arg line="-C ${output.path}"/>
 			<arg line="Gallery.swf"/>
 		</java>
@@ -82,7 +83,8 @@
 			<arg line="-storepass ${android.certificate.password}"/>
 			<arg line="${output.path}/Gallery.apk"/>
 			<arg line="source/Gallery-app.xml"/>
-			<!--<arg line="icon48.png icon72.png icon128.png icon512.png"/>-->
+			<arg line="-C ${icon.path}"/>
+			<arg line="icon29.png icon48.png icon50.png icon57.png icon58.png icon72.png icon100.png icon114.png icon128.png icon144.png"/>
 			<arg line="-C ${output.path}"/>
 			<arg line="Gallery.swf"/>
 		</java>
