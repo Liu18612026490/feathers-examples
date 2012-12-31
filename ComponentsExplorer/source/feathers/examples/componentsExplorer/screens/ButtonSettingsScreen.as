@@ -66,7 +66,7 @@ package feathers.examples.componentsExplorer.screens
 			this._verticalAlignPicker.addEventListener(Event.CHANGE, verticalAlignPicker_changeHandler);
 
 			this._iconToggle = new ToggleSwitch();
-			this._iconToggle.isSelected = true;
+			this._iconToggle.isSelected = this.settings.hasIcon;
 			this._iconToggle.addEventListener(Event.CHANGE, iconToggle_changeHandler);
 
 			this._iconPositionPicker = new PickerList();
