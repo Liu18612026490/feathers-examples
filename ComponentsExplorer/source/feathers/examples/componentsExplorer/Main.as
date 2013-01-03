@@ -222,6 +222,8 @@ package feathers.examples.componentsExplorer
 				complete: MAIN_MENU
 			}));
 
+			this._transitionManager = new ScreenSlidingStackTransitionManager(this._navigator);
+			this._transitionManager.duration = 0.4;
 
 			if(DeviceCapabilities.isTablet(Starling.current.nativeStage))
 			{
@@ -243,9 +245,6 @@ package feathers.examples.componentsExplorer
 				this._navigator.addScreen(MAIN_MENU, new ScreenNavigatorItem(MainMenuScreen, MAIN_MENU_EVENTS));
 				this._navigator.showScreen(MAIN_MENU);
 			}
-			
-			this._transitionManager = new ScreenSlidingStackTransitionManager(this._navigator);
-			this._transitionManager.duration = 0.4;
 		}
 
 		private function removedFromStageHandler(event:Event):void

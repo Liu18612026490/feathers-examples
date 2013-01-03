@@ -5,6 +5,9 @@ package feathers.examples.componentsExplorer.screens
 	import feathers.controls.Screen;
 	import feathers.data.ListCollection;
 	import feathers.skins.StandardIcons;
+	import feathers.system.DeviceCapabilities;
+
+	import starling.core.Starling;
 
 	import starling.events.Event;
 	import starling.textures.Texture;
@@ -71,9 +74,16 @@ package feathers.examples.componentsExplorer.screens
 				{ label: "Text Input", event: SHOW_TEXT_INPUT },
 				{ label: "Toggles", event: SHOW_TOGGLES },
 			]);
-			this._list.itemRendererProperties.labelField = "label";
-			this._list.itemRendererProperties.accessorySourceFunction = accessorySourceFunction;
 			this._list.addEventListener(Event.CHANGE, list_changeHandler);
+			this._list.itemRendererProperties.labelField = "label";
+			if(!DeviceCapabilities.isTablet(Starling.current.nativeStage))
+			{
+				this._list.itemRendererProperties.accessorySourceFunction = accessorySourceFunction;
+			}
+			else
+			{
+				this._list.selectedIndex = 0;
+			}
 			this.addChild(this._list);
 		}
 		
