@@ -4,6 +4,9 @@ package feathers.examples.componentsExplorer.screens
 	import feathers.controls.Header;
 	import feathers.controls.Screen;
 	import feathers.controls.TextInput;
+	import feathers.system.DeviceCapabilities;
+
+	import starling.core.Starling;
 
 	import starling.display.DisplayObject;
 	import starling.events.Event;
@@ -25,17 +28,22 @@ package feathers.examples.componentsExplorer.screens
 			this._input = new TextInput();
 			this.addChild(this._input);
 
-			this._backButton = new Button();
-			this._backButton.label = "Back";
-			this._backButton.addEventListener(Event.TRIGGERED, backButton_triggeredHandler);
-
 			this._header = new Header();
 			this._header.title = "Text Input";
 			this.addChild(this._header);
-			this._header.leftItems = new <DisplayObject>
-			[
-				this._backButton
-			];
+
+			if(!DeviceCapabilities.isTablet(Starling.current.nativeStage))
+			{
+				this._backButton = new Button();
+				this._backButton.label = "Back";
+				this._backButton.addEventListener(Event.TRIGGERED, backButton_triggeredHandler);
+
+				this._header.leftItems = new <DisplayObject>
+				[
+					this._backButton
+				];
+			}
+
 
 			// handles the back hardware key on android
 			this.backButtonHandler = this.onBackButton;

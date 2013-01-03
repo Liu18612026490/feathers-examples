@@ -4,6 +4,9 @@ package feathers.examples.componentsExplorer.screens
 	import feathers.controls.Header;
 	import feathers.controls.PageIndicator;
 	import feathers.controls.Screen;
+	import feathers.system.DeviceCapabilities;
+
+	import starling.core.Starling;
 
 	import starling.display.DisplayObject;
 	import starling.events.Event;
@@ -27,17 +30,21 @@ package feathers.examples.componentsExplorer.screens
 			this._pageIndicator.addEventListener(Event.CHANGE, pageIndicator_changeHandler);
 			this.addChild(this._pageIndicator);
 
-			this._backButton = new Button();
-			this._backButton.label = "Back";
-			this._backButton.addEventListener(Event.TRIGGERED, backButton_triggeredHandler);
-
 			this._header = new Header();
 			this._header.title = "Page Indicator";
 			this.addChild(this._header);
-			this._header.leftItems = new <DisplayObject>
-			[
-				this._backButton
-			];
+
+			if(!DeviceCapabilities.isTablet(Starling.current.nativeStage))
+			{
+				this._backButton = new Button();
+				this._backButton.label = "Back";
+				this._backButton.addEventListener(Event.TRIGGERED, backButton_triggeredHandler);
+
+				this._header.leftItems = new <DisplayObject>
+				[
+					this._backButton
+				];
+			}
 
 			// handles the back hardware key on android
 			this.backButtonHandler = this.onBackButton;

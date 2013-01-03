@@ -6,6 +6,9 @@ package feathers.examples.componentsExplorer.screens
 	import feathers.controls.Screen;
 	import feathers.data.ListCollection;
 	import feathers.examples.componentsExplorer.data.ListSettings;
+	import feathers.system.DeviceCapabilities;
+
+	import starling.core.Starling;
 
 	import starling.display.DisplayObject;
 	import starling.events.Event;
@@ -48,21 +51,26 @@ package feathers.examples.componentsExplorer.screens
 			this._list.addEventListener(Event.CHANGE, list_changeHandler);
 			this.addChildAt(this._list, 0);
 
-			this._backButton = new Button();
-			this._backButton.label = "Back";
-			this._backButton.addEventListener(Event.TRIGGERED, backButton_triggeredHandler);
+			this._header = new Header();
+			this._header.title = "List";
+			this.addChild(this._header);
+
+			if(!DeviceCapabilities.isTablet(Starling.current.nativeStage))
+			{
+				this._backButton = new Button();
+				this._backButton.label = "Back";
+				this._backButton.addEventListener(Event.TRIGGERED, backButton_triggeredHandler);
+
+				this._header.leftItems = new <DisplayObject>
+				[
+					this._backButton
+				];
+			}
 
 			this._settingsButton = new Button();
 			this._settingsButton.label = "Settings";
 			this._settingsButton.addEventListener(Event.TRIGGERED, settingsButton_triggeredHandler);
 
-			this._header = new Header();
-			this._header.title = "List";
-			this.addChild(this._header);
-			this._header.leftItems = new <DisplayObject>
-			[
-				this._backButton
-			];
 			this._header.rightItems = new <DisplayObject>
 			[
 				this._settingsButton

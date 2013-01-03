@@ -25,10 +25,17 @@ package feathers.examples.componentsExplorer
 	import feathers.examples.componentsExplorer.screens.TextInputScreen;
 	import feathers.examples.componentsExplorer.screens.ToggleScreen;
 	import feathers.motion.transitions.ScreenSlidingStackTransitionManager;
+	import feathers.system.DeviceCapabilities;
+	import feathers.system.DeviceCapabilities;
 	import feathers.themes.MetalWorksMobileTheme;
+
+	import flash.system.Capabilities;
+
+	import starling.core.Starling;
 
 	import starling.display.Sprite;
 	import starling.events.Event;
+	import starling.events.ResizeEvent;
 
 	public class Main extends Sprite
 	{
@@ -50,16 +57,46 @@ package feathers.examples.componentsExplorer
 		private static const TAB_BAR:String = "tabBar";
 		private static const TEXT_INPUT:String = "textInput";
 		private static const TOGGLES:String = "toggles";
+
+		private static const MAIN_MENU_EVENTS:Object =
+		{
+			showButton: BUTTON,
+			showButtonGroup: BUTTON_GROUP,
+			showCallout: CALLOUT,
+			showGroupedList: GROUPED_LIST,
+			showList: LIST,
+			showPageIndicator: PAGE_INDICATOR,
+			showPickerList: PICKER_LIST,
+			showProgressBar: PROGRESS_BAR,
+			showScrollText: SCROLL_TEXT,
+			showSlider: SLIDER,
+			showTabBar: TAB_BAR,
+			showTextInput: TEXT_INPUT,
+			showToggles: TOGGLES
+		};
 		
 		public function Main()
 		{
 			super();
 			this.addEventListener(Event.ADDED_TO_STAGE, addedToStageHandler);
+			this.addEventListener(Event.REMOVED_FROM_STAGE, removedFromStageHandler);
 		}
 		
 		private var _theme:MetalWorksMobileTheme;
 		private var _navigator:ScreenNavigator;
+		private var _menu:MainMenuScreen;
 		private var _transitionManager:ScreenSlidingStackTransitionManager;
+
+		private function layoutForTablet():void
+		{
+			this._menu.width = 400 * DeviceCapabilities.dpi / this._theme.originalDPI;
+			this._menu.height = this.stage.stageHeight;
+			this._menu.validate();
+
+			this._navigator.x = this._menu.width;
+			this._navigator.width = this.stage.stageWidth - this._navigator.x;
+			this._navigator.height = this.stage.stageHeight;
+		}
 		
 		private function addedToStageHandler(event:Event):void
 		{
@@ -67,23 +104,6 @@ package feathers.examples.componentsExplorer
 			
 			this._navigator = new ScreenNavigator();
 			this.addChild(this._navigator);
-			
-			this._navigator.addScreen(MAIN_MENU, new ScreenNavigatorItem(MainMenuScreen,
-			{
-				showButton: BUTTON,
-				showButtonGroup: BUTTON_GROUP,
-				showCallout: CALLOUT,
-				showGroupedList: GROUPED_LIST,
-				showList: LIST,
-				showPageIndicator: PAGE_INDICATOR,
-				showPickerList: PICKER_LIST,
-				showProgressBar: PROGRESS_BAR,
-				showScrollText: SCROLL_TEXT,
-				showSlider: SLIDER,
-				showTabBar: TAB_BAR,
-				showTextInput: TEXT_INPUT,
-				showToggles: TOGGLES
-			}));
 
 			const buttonSettings:ButtonSettings = new ButtonSettings();
 			this._navigator.addScreen(BUTTON, new ScreenNavigatorItem(ButtonScreen,
@@ -201,11 +221,50 @@ package feathers.examples.componentsExplorer
 			{
 				complete: MAIN_MENU
 			}));
-			
-			this._navigator.showScreen(MAIN_MENU);
+
+
+			if(DeviceCapabilities.isTablet(Starling.current.nativeStage))
+			{
+				this.stage.addEventListener(ResizeEvent.RESIZE, stage_resizeHandler);
+
+				this._menu = new MainMenuScreen();
+				for(var eventType:String in MAIN_MENU_EVENTS)
+				{
+					this._menu.addEventListener(eventType, mainMenuEventHandler);
+				}
+				this.addChild(this._menu);
+
+				this._navigator.clipContent = true;
+
+				this.layoutForTablet();
+			}
+			else
+			{
+				this._navigator.addScreen(MAIN_MENU, new ScreenNavigatorItem(MainMenuScreen, MAIN_MENU_EVENTS));
+				this._navigator.showScreen(MAIN_MENU);
+			}
 			
 			this._transitionManager = new ScreenSlidingStackTransitionManager(this._navigator);
 			this._transitionManager.duration = 0.4;
+		}
+
+		private function removedFromStageHandler(event:Event):void
+		{
+			this.stage.removeEventListener(ResizeEvent.RESIZE, stage_resizeHandler);
+		}
+
+		private function mainMenuEventHandler(event:Event):void
+		{
+			const screenName:String = MAIN_MENU_EVENTS[event.type];
+			//because we're controlling the navigation externally,
+			this._transitionManager.clearStack();
+			this._transitionManager.skipNextTransition = true;
+			this._navigator.showScreen(screenName);
+		}
+
+		private function stage_resizeHandler(event:ResizeEvent):void
+		{
+			this.layoutForTablet();
 		}
 	}
 }
