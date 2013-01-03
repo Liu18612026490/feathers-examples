@@ -16,10 +16,14 @@ package feathers.examples.layoutExplorer
 	import feathers.examples.layoutExplorer.screens.VerticalLayoutScreen;
 	import feathers.examples.layoutExplorer.screens.VerticalLayoutSettingsScreen;
 	import feathers.motion.transitions.ScreenSlidingStackTransitionManager;
+	import feathers.system.DeviceCapabilities;
 	import feathers.themes.MetalWorksMobileTheme;
+
+	import starling.core.Starling;
 
 	import starling.display.Sprite;
 	import starling.events.Event;
+	import starling.events.ResizeEvent;
 
 	public class Main extends Sprite
 	{
@@ -33,15 +37,36 @@ package feathers.examples.layoutExplorer
 		private static const TILED_ROWS_SETTINGS:String = "tiledRowsSettings";
 		private static const TILED_COLUMNS_SETTINGS:String = "tiledColumnsSettings";
 
+		private static const MAIN_MENU_EVENTS:Object =
+		{
+			showHorizontal: HORIZONTAL,
+			showVertical: VERTICAL,
+			showTiledRows: TILED_ROWS,
+			showTiledColumns: TILED_COLUMNS
+		}
+
 		public function Main()
 		{
-			super()
+			super();
 			this.addEventListener(Event.ADDED_TO_STAGE, addedToStageHandler);
+			this.addEventListener(Event.REMOVED_FROM_STAGE, removedFromStageHandler);
 		}
 
 		private var _theme:MetalWorksMobileTheme;
 		private var _navigator:ScreenNavigator;
+		private var _menu:MainMenuScreen;
 		private var _transitionManager:ScreenSlidingStackTransitionManager;
+
+		private function layoutForTablet():void
+		{
+			this._menu.width = 400 * DeviceCapabilities.dpi / this._theme.originalDPI;
+			this._menu.height = this.stage.stageHeight;
+			this._menu.validate();
+
+			this._navigator.x = this._menu.width;
+			this._navigator.width = this.stage.stageWidth - this._navigator.x;
+			this._navigator.height = this.stage.stageHeight;
+		}
 
 		private function addedToStageHandler(event:Event):void
 		{
@@ -49,14 +74,6 @@ package feathers.examples.layoutExplorer
 
 			this._navigator = new ScreenNavigator();
 			this.addChild(this._navigator);
-
-			this._navigator.addScreen(MAIN_MENU, new ScreenNavigatorItem(MainMenuScreen,
-			{
-				showHorizontal: HORIZONTAL,
-				showVertical: VERTICAL,
-				showTiledRows: TILED_ROWS,
-				showTiledColumns: TILED_COLUMNS
-			}));
 
 			const horizontalLayoutSettings:HorizontalLayoutSettings = new HorizontalLayoutSettings();
 			this._navigator.addScreen(HORIZONTAL, new ScreenNavigatorItem(HorizontalLayoutScreen,
@@ -126,10 +143,49 @@ package feathers.examples.layoutExplorer
 				settings: tiledColumnsLayoutSettings
 			}));
 
-			this._navigator.showScreen(MAIN_MENU);
-
 			this._transitionManager = new ScreenSlidingStackTransitionManager(this._navigator);
 			this._transitionManager.duration = 0.4;
+
+			if(DeviceCapabilities.isTablet(Starling.current.nativeStage))
+			{
+				this.stage.addEventListener(ResizeEvent.RESIZE, stage_resizeHandler);
+
+				this._menu = new MainMenuScreen();
+				for(var eventType:String in MAIN_MENU_EVENTS)
+				{
+					this._menu.addEventListener(eventType, mainMenuEventHandler);
+				}
+				this.addChild(this._menu);
+
+				this._navigator.clipContent = true;
+
+				this.layoutForTablet();
+			}
+			else
+			{
+				this._navigator.addScreen(MAIN_MENU, new ScreenNavigatorItem(MainMenuScreen, MAIN_MENU_EVENTS));
+				this._navigator.showScreen(MAIN_MENU);
+			}
+		}
+
+		private function removedFromStageHandler(event:Event):void
+		{
+			this.stage.removeEventListener(ResizeEvent.RESIZE, stage_resizeHandler);
+		}
+
+		private function mainMenuEventHandler(event:Event):void
+		{
+			const screenName:String = MAIN_MENU_EVENTS[event.type];
+			//because we're controlling the navigation externally, it doesn't
+			//make sense to transition or keep a history
+			this._transitionManager.clearStack();
+			this._transitionManager.skipNextTransition = true;
+			this._navigator.showScreen(screenName);
+		}
+
+		private function stage_resizeHandler(event:ResizeEvent):void
+		{
+			this.layoutForTablet();
 		}
 	}
 }

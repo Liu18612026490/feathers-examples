@@ -5,6 +5,9 @@ package feathers.examples.layoutExplorer.screens
 	import feathers.controls.Screen;
 	import feathers.data.ListCollection;
 	import feathers.skins.StandardIcons;
+	import feathers.system.DeviceCapabilities;
+
+	import starling.core.Starling;
 
 	import starling.events.Event;
 	import starling.textures.Texture;
@@ -43,8 +46,15 @@ package feathers.examples.layoutExplorer.screens
 				{ text: "Tiled Columns", event: SHOW_TILED_COLUMNS },
 			]);
 			this._list.itemRendererProperties.labelField = "text";
-			this._list.itemRendererProperties.accessorySourceFunction = accessorySourceFunction;
 			this._list.addEventListener(Event.CHANGE, list_changeHandler);
+			if(!DeviceCapabilities.isTablet(Starling.current.nativeStage))
+			{
+				this._list.itemRendererProperties.accessorySourceFunction = accessorySourceFunction;
+			}
+			else
+			{
+				this._list.selectedIndex = 0;
+			}
 			this.addChild(this._list);
 
 			this._header = new Header();
