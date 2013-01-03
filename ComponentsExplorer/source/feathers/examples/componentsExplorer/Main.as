@@ -26,13 +26,9 @@ package feathers.examples.componentsExplorer
 	import feathers.examples.componentsExplorer.screens.ToggleScreen;
 	import feathers.motion.transitions.ScreenSlidingStackTransitionManager;
 	import feathers.system.DeviceCapabilities;
-	import feathers.system.DeviceCapabilities;
 	import feathers.themes.MetalWorksMobileTheme;
 
-	import flash.system.Capabilities;
-
 	import starling.core.Starling;
-
 	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.events.ResizeEvent;
