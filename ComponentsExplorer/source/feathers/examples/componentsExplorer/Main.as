@@ -251,7 +251,8 @@ package feathers.examples.componentsExplorer
 		private function mainMenuEventHandler(event:Event):void
 		{
 			const screenName:String = MAIN_MENU_EVENTS[event.type];
-			//because we're controlling the navigation externally,
+			//because we're controlling the navigation externally, it doesn't
+			//make sense to transition or keep a history
 			this._transitionManager.clearStack();
 			this._transitionManager.skipNextTransition = true;
 			this._navigator.showScreen(screenName);
