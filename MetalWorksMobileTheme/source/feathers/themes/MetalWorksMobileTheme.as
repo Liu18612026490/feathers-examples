@@ -93,6 +93,7 @@ package feathers.themes
 		protected static const DARK_TEXT_COLOR:uint = 0x1a1a1a;
 		protected static const SELECTED_TEXT_COLOR:uint = 0xff9900;
 		protected static const DISABLED_TEXT_COLOR:uint = 0x333333;
+		protected static const LIST_BACKGROUND_COLOR:uint = 0x2e2e2e;
 
 		protected static const ORIGINAL_DPI_IPHONE_RETINA:int = 326;
 		protected static const ORIGINAL_DPI_IPAD_RETINA:int = 264;
@@ -419,7 +420,9 @@ package feathers.themes
 			this.setInitializerForClass(Header, headerInitializer);
 			this.setInitializerForClass(Callout, calloutInitializer);
 			this.setInitializerForClass(Scroller, scrollerInitializer);
+			this.setInitializerForClass(List, listInitializer);
 			this.setInitializerForClass(List, nothingInitializer, PickerList.DEFAULT_CHILD_NAME_LIST);
+			this.setInitializerForClass(GroupedList, groupedListInitializer);
 			this.setInitializerForClass(GroupedList, insetGroupedListInitializer, GroupedList.ALTERNATE_NAME_INSET_GROUPED_LIST);
 		}
 
@@ -1019,6 +1022,18 @@ package feathers.themes
 		{
 			scroller.verticalScrollBarFactory = this.verticalScrollBarFactory;
 			scroller.horizontalScrollBarFactory = this.horizontalScrollBarFactory;
+		}
+
+		protected function listInitializer(list:List):void
+		{
+			const backgroundSkin:Quad = new Quad(100, 100, LIST_BACKGROUND_COLOR);
+			list.backgroundSkin = backgroundSkin;
+		}
+
+		protected function groupedListInitializer(list:GroupedList):void
+		{
+			const backgroundSkin:Quad = new Quad(100, 100, LIST_BACKGROUND_COLOR);
+			list.backgroundSkin = backgroundSkin;
 		}
 
 		protected function insetGroupedListInitializer(list:GroupedList):void

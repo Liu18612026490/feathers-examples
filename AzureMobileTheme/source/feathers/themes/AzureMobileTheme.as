@@ -28,9 +28,11 @@ package feathers.themes
 	import feathers.controls.ButtonGroup;
 	import feathers.controls.Callout;
 	import feathers.controls.Check;
+	import feathers.controls.GroupedList;
 	import feathers.controls.Header;
 	import feathers.controls.ImageLoader;
 	import feathers.controls.Label;
+	import feathers.controls.List;
 	import feathers.controls.PageIndicator;
 	import feathers.controls.PickerList;
 	import feathers.controls.ProgressBar;
@@ -74,6 +76,7 @@ package feathers.themes
 	import starling.display.DisplayObject;
 	import starling.display.DisplayObjectContainer;
 	import starling.display.Image;
+	import starling.display.Quad;
 	import starling.events.Event;
 	import starling.text.BitmapFont;
 	import starling.textures.Texture;
@@ -101,6 +104,7 @@ package feathers.themes
 		protected static const BACKGROUND_COLOR:uint = 0x13171a;
 		protected static const PRIMARY_TEXT_COLOR:uint = 0xe5e5e5;
 		protected static const SELECTED_TEXT_COLOR:uint = 0xffffff;
+		protected static const LIST_BACKGROUND_COLOR:uint = 0x1d2326;
 
 		protected static const ORIGINAL_DPI_IPHONE_RETINA:int = 326;
 		protected static const ORIGINAL_DPI_IPAD_RETINA:int = 264;
@@ -378,6 +382,8 @@ package feathers.themes
 			this.setInitializerForClass(PageIndicator, pageIndicatorInitializer);
 			this.setInitializerForClass(ProgressBar, progressBarInitializer);
 			this.setInitializerForClass(Callout, calloutInitializer);
+			this.setInitializerForClass(List, listInitializer);
+			this.setInitializerForClass(GroupedList, groupedListInitializer);
 		}
 
 		protected function pageIndicatorNormalSymbolFactory():Image
@@ -883,6 +889,18 @@ package feathers.themes
 			rightArrowSkin.scaleX = rightArrowSkin.scaleY = this.scale;
 			callout.rightArrowSkin = rightArrowSkin;
 			callout.rightArrowGap = -1 * this.scale;
+		}
+
+		protected function listInitializer(list:List):void
+		{
+			const backgroundSkin:Quad = new Quad(100, 100, LIST_BACKGROUND_COLOR);
+			list.backgroundSkin = backgroundSkin;
+		}
+
+		protected function groupedListInitializer(list:GroupedList):void
+		{
+			const backgroundSkin:Quad = new Quad(100, 100, LIST_BACKGROUND_COLOR);
+			list.backgroundSkin = backgroundSkin;
 		}
 
 		protected function root_addedToStageHandler(event:Event):void
