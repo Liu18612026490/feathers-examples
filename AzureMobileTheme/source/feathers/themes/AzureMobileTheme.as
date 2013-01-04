@@ -72,7 +72,6 @@ package feathers.themes
 	import flash.text.TextFormat;
 
 	import starling.core.Starling;
-	import starling.display.BlendMode;
 	import starling.display.DisplayObject;
 	import starling.display.DisplayObjectContainer;
 	import starling.display.Image;
@@ -715,8 +714,7 @@ package feathers.themes
 			skinSelector.imageProperties =
 			{
 				width: 88 * this.scale,
-				height: 88 * this.scale,
-				blendMode: BlendMode.NONE
+				height: 88 * this.scale
 			};
 			renderer.stateToSkinFunction = skinSelector.updateValue;
 
@@ -798,7 +796,6 @@ package feathers.themes
 			const backgroundSkin:Image = new Image(toolBarBackgroundSkinTexture);
 			backgroundSkin.width = 88 * this.scale;
 			backgroundSkin.height = 88 * this.scale;
-			backgroundSkin.blendMode = BlendMode.NONE;
 			header.backgroundSkin = backgroundSkin;
 			header.titleProperties.textFormat = new BitmapFontTextFormat(bitmapFont, this.fontSize, PRIMARY_TEXT_COLOR);
 			header.paddingTop = header.paddingRight = header.paddingBottom =
