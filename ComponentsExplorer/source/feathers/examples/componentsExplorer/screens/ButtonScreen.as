@@ -2,6 +2,7 @@ package feathers.examples.componentsExplorer.screens
 {
 	import feathers.controls.Button;
 	import feathers.controls.Header;
+	import feathers.controls.ImageLoader;
 	import feathers.controls.Screen;
 	import feathers.examples.componentsExplorer.data.ButtonSettings;
 	import feathers.system.DeviceCapabilities;
@@ -34,11 +35,27 @@ package feathers.examples.componentsExplorer.screens
 		private var _backButton:Button;
 		private var _settingsButton:Button;
 		
-		private var _icon:Image;
+		private var _icon:ImageLoader;
+		private var _iconTexture:Texture;
+
+		override public function dispose():void
+		{
+			if(this._iconTexture)
+			{
+				//since we created this texture, it's up to us to dispose it
+				this._iconTexture.dispose();
+			}
+			super.dispose();
+		}
 		
 		override protected function initialize():void
 		{
-			this._icon = new Image(Texture.fromBitmap(new SKULL_ICON()));
+			this._iconTexture = Texture.fromBitmap(new SKULL_ICON());
+			this._icon = new ImageLoader();
+			this._icon.source = this._iconTexture;
+			//the icon will be blurry if it's not on a whole pixel. ImageLoader
+			//can snap to pixels to fix that issue.
+			this._icon.snapToPixels = true;
 			this._icon.scaleX = this._icon.scaleY = this.dpiScale;
 			
 			this._button = new Button();
