@@ -56,7 +56,7 @@ package feathers.examples.componentsExplorer.screens
 			//the icon will be blurry if it's not on a whole pixel. ImageLoader
 			//can snap to pixels to fix that issue.
 			this._icon.snapToPixels = true;
-			this._icon.scaleX = this._icon.scaleY = this.dpiScale;
+			this._icon.textureScale = this.dpiScale;
 			
 			this._button = new Button();
 			this._button.label = "Click Me";
