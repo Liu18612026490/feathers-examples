@@ -34,8 +34,8 @@ package
 			Starling.multitouchEnabled = true;
 			this._starling = new Starling(Main, this.stage);
 			this._starling.enableErrorChecking = false;
-			this._starling.showStats = true;
-			this._starling.showStatsAt(HAlign.LEFT, VAlign.BOTTOM);
+			//this._starling.showStats = true;
+			//this._starling.showStatsAt(HAlign.LEFT, VAlign.BOTTOM);
 			this._starling.start();
 
 			this.stage.addEventListener(Event.RESIZE, stage_resizeHandler, false, int.MAX_VALUE, true);
@@ -55,7 +55,7 @@ package
 				this._starling.viewPort = viewPort;
 			}
 			catch(error:Error) {}
-			this._starling.showStatsAt(HAlign.LEFT, VAlign.BOTTOM);
+			//this._starling.showStatsAt(HAlign.LEFT, VAlign.BOTTOM);
 		}
 
 		private function stage_deactivateHandler(event:Event):void
