@@ -2,6 +2,8 @@ package feathers.examples.layoutExplorer
 {
 	import feathers.controls.ScreenNavigator;
 	import feathers.controls.ScreenNavigatorItem;
+	import feathers.controls.ScrollContainer;
+	import feathers.controls.Scroller;
 	import feathers.examples.layoutExplorer.data.HorizontalLayoutSettings;
 	import feathers.examples.layoutExplorer.data.TiledColumnsLayoutSettings;
 	import feathers.examples.layoutExplorer.data.TiledRowsLayoutSettings;
@@ -15,6 +17,8 @@ package feathers.examples.layoutExplorer
 	import feathers.examples.layoutExplorer.screens.TiledRowsLayoutSettingsScreen;
 	import feathers.examples.layoutExplorer.screens.VerticalLayoutScreen;
 	import feathers.examples.layoutExplorer.screens.VerticalLayoutSettingsScreen;
+	import feathers.layout.AnchorLayout;
+	import feathers.layout.AnchorLayoutData;
 	import feathers.motion.transitions.ScreenSlidingStackTransitionManager;
 	import feathers.system.DeviceCapabilities;
 	import feathers.themes.MetalWorksMobileTheme;
@@ -53,19 +57,15 @@ package feathers.examples.layoutExplorer
 		}
 
 		private var _theme:MetalWorksMobileTheme;
+		private var _container:ScrollContainer;
 		private var _navigator:ScreenNavigator;
 		private var _menu:MainMenuScreen;
 		private var _transitionManager:ScreenSlidingStackTransitionManager;
 
 		private function layoutForTablet():void
 		{
-			this._menu.width = 400 * DeviceCapabilities.dpi / this._theme.originalDPI;
-			this._menu.height = this.stage.stageHeight;
-			this._menu.validate();
-
-			this._navigator.x = this._menu.width;
-			this._navigator.width = this.stage.stageWidth - this._navigator.x;
-			this._navigator.height = this.stage.stageHeight;
+			this._container.width = this.stage.stageWidth;
+			this._container.height = this.stage.stageHeight;
 		}
 
 		private function addedToStageHandler(event:Event):void
@@ -73,7 +73,6 @@ package feathers.examples.layoutExplorer
 			this._theme = new MetalWorksMobileTheme(this.stage);
 
 			this._navigator = new ScreenNavigator();
-			this.addChild(this._navigator);
 
 			const horizontalLayoutSettings:HorizontalLayoutSettings = new HorizontalLayoutSettings();
 			this._navigator.addScreen(HORIZONTAL, new ScreenNavigatorItem(HorizontalLayoutScreen,
@@ -150,20 +149,43 @@ package feathers.examples.layoutExplorer
 			{
 				this.stage.addEventListener(ResizeEvent.RESIZE, stage_resizeHandler);
 
+				this._container = new ScrollContainer();
+				this._container.layout = new AnchorLayout();
+				this._container.scrollerProperties.horizontalScrollPolicy = Scroller.SCROLL_POLICY_OFF;
+				this._container.scrollerProperties.verticalScrollPolicy = Scroller.SCROLL_POLICY_OFF;
+				this.addChild(this._container);
+
 				this._menu = new MainMenuScreen();
 				for(var eventType:String in MAIN_MENU_EVENTS)
 				{
 					this._menu.addEventListener(eventType, mainMenuEventHandler);
 				}
-				this.addChild(this._menu);
+				this._menu.width = 400 * DeviceCapabilities.dpi / this._theme.originalDPI;
+				const menuLayoutData:AnchorLayoutData = new AnchorLayoutData();
+				menuLayoutData.top = 0;
+				menuLayoutData.bottom = 0;
+				menuLayoutData.left = 0;
+				this._menu.layoutData = menuLayoutData;
+				this._container.addChild(this._menu);
 
 				this._navigator.clipContent = true;
+				const navigatorLayoutData:AnchorLayoutData = new AnchorLayoutData();
+				navigatorLayoutData.top = 0;
+				navigatorLayoutData.right = 0;
+				navigatorLayoutData.bottom = 0;
+				navigatorLayoutData.leftAnchorDisplayObject = this._menu;
+				navigatorLayoutData.left = 0;
+				this._navigator.layoutData = navigatorLayoutData;
+				this._container.addChild(this._navigator);
 
 				this.layoutForTablet();
 			}
 			else
 			{
 				this._navigator.addScreen(MAIN_MENU, new ScreenNavigatorItem(MainMenuScreen, MAIN_MENU_EVENTS));
+
+				this.addChild(this._navigator);
+
 				this._navigator.showScreen(MAIN_MENU);
 			}
 		}
@@ -185,6 +207,9 @@ package feathers.examples.layoutExplorer
 
 		private function stage_resizeHandler(event:ResizeEvent):void
 		{
+			//we don't need to layout for phones because ScreenNavigator knows
+			//to automatically resize itself to fill the stage if we don't give
+			//it a width and height.
 			this.layoutForTablet();
 		}
 	}

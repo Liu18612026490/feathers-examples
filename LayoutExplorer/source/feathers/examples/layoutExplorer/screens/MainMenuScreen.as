@@ -37,6 +37,10 @@ package feathers.examples.layoutExplorer.screens
 
 		override protected function initialize():void
 		{
+			this._header = new Header();
+			this._header.title = "Layouts in Feathers";
+			this.addChild(this._header);
+
 			this._list = new List();
 			this._list.dataProvider = new ListCollection(
 			[
@@ -56,10 +60,6 @@ package feathers.examples.layoutExplorer.screens
 				this._list.selectedIndex = 0;
 			}
 			this.addChild(this._list);
-
-			this._header = new Header();
-			this._header.title = "Layouts in Feathers";
-			this.addChild(this._header);
 		}
 
 		override protected function draw():void
