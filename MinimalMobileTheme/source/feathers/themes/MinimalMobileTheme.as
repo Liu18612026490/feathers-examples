@@ -343,14 +343,20 @@ package feathers.themes
 			this.setInitializerForClass(Callout, calloutInitializer);
 		}
 
-		protected function pageIndicatorNormalSymbolFactory():Image
+		protected function pageIndicatorNormalSymbolFactory():DisplayObject
 		{
-			return new Image(this.pageIndicatorNormalSkinTexture);
+			const symbol:ImageLoader = new ImageLoader();
+			symbol.source = this.pageIndicatorNormalSkinTexture;
+			symbol.textureScale = this.scale;
+			return symbol;
 		}
 
-		protected function pageIndicatorSelectedSymbolFactory():Image
+		protected function pageIndicatorSelectedSymbolFactory():DisplayObject
 		{
-			return new Image(this.pageIndicatorSelectedSkinTexture);
+			const symbol:ImageLoader = new ImageLoader();
+			symbol.source = this.pageIndicatorSelectedSkinTexture;
+			symbol.textureScale = this.scale;
+			return symbol;
 		}
 
 		protected function imageLoaderFactory():ImageLoader

@@ -426,14 +426,20 @@ package feathers.themes
 			this.setInitializerForClass(GroupedList, insetGroupedListInitializer, GroupedList.ALTERNATE_NAME_INSET_GROUPED_LIST);
 		}
 
-		protected function pageIndicatorNormalSymbolFactory():Image
+		protected function pageIndicatorNormalSymbolFactory():DisplayObject
 		{
-			return new Image(this.pageIndicatorNormalSkinTexture);
+			const symbol:ImageLoader = new ImageLoader();
+			symbol.source = this.pageIndicatorNormalSkinTexture;
+			symbol.textureScale = this.scale;
+			return symbol;
 		}
 
-		protected function pageIndicatorSelectedSymbolFactory():Image
+		protected function pageIndicatorSelectedSymbolFactory():DisplayObject
 		{
-			return new Image(this.pageIndicatorSelectedSkinTexture);
+			const symbol:ImageLoader = new ImageLoader();
+			symbol.source = this.pageIndicatorSelectedSkinTexture;
+			symbol.textureScale = this.scale;
+			return symbol;
 		}
 
 		protected function imageLoaderFactory():ImageLoader
