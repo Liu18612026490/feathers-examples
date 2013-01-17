@@ -36,16 +36,22 @@ package feathers.examples.componentsExplorer.screens
 			items.fixed = true;
 
 			this._list = new PickerList();
+			this._list.prompt = "Select an Item";
 			this._list.dataProvider = new ListCollection(items);
+			//normally, the first item is selected, but let's show the prompt
+			this._list.selectedIndex = -1;
 			this.addChildAt(this._list, 0);
 
-			this._list.typicalItem = {text: "Item 1000"};
+			//the typical item helps us set an ideal width for the button
+			//if we don't use a typical item, the button will resize to fit
+			//the currently selected item.
+			this._list.typicalItem = { text: "Item 1000"};
 			this._list.labelField = "text";
 
 			//notice that we're setting typicalItem on the list separately. we
 			//may want to have the list measure at a different width, so it
 			//might need a different typical item than the picker list's button.
-			this._list.listProperties.typicalItem = {text: "Item 1000"};
+			this._list.listProperties.typicalItem = { text: "Item 1000" };
 
 			//notice that we're setting labelField on the item renderers
 			//separately. the default item renderer has a labelField property,
