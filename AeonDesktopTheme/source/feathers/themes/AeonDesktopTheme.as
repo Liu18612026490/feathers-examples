@@ -38,8 +38,8 @@ package feathers.themes
 	import feathers.controls.Radio;
 	import feathers.controls.Screen;
 	import feathers.controls.ScrollBar;
+	import feathers.controls.ScrollContainer;
 	import feathers.controls.ScrollText;
-	import feathers.controls.Scroller;
 	import feathers.controls.SimpleScrollBar;
 	import feathers.controls.Slider;
 	import feathers.controls.TextInput;
@@ -403,9 +403,8 @@ package feathers.themes
 			this.setInitializerForClass(TextInput, textInputInitializer);
 			this.setInitializerForClass(PageIndicator, pageIndicatorInitializer);
 			this.setInitializerForClass(ProgressBar, progressBarInitializer);
-			this.setInitializerForClass(Scroller, scrollerInitializer);
 			this.setInitializerForClass(List, listInitializer);
-			this.setInitializerForClass(List, nothingInitializer, PickerList.DEFAULT_CHILD_NAME_LIST);
+			this.setInitializerForClass(List, pickerListListInitializer, PickerList.DEFAULT_CHILD_NAME_LIST);
 			this.setInitializerForClass(GroupedList, groupedListInitializer);
 			this.setInitializerForClass(PickerList, pickerListInitializer);
 			this.setInitializerForClass(DefaultListItemRenderer, defaultItemRendererInitializer);
@@ -413,6 +412,7 @@ package feathers.themes
 			this.setInitializerForClass(DefaultGroupedListHeaderOrFooterRenderer, defaultHeaderOrFooterRendererInitializer);
 			this.setInitializerForClass(Header, headerInitializer);
 			this.setInitializerForClass(Callout, calloutInitializer);
+			this.setInitializerForClass(ScrollContainer, scrollContainerInitializer);
 		}
 
 		protected function pageIndicatorNormalSymbolFactory():Image
@@ -444,6 +444,15 @@ package feathers.themes
 		{
 			text.textFormat = this.defaultTextFormat;
 			text.paddingTop = text.paddingRight = text.paddingBottom = text.paddingLeft = 8;
+
+			text.horizontalScrollBarFactory = horizontalScrollBarFactory;
+			text.verticalScrollBarFactory = verticalScrollBarFactory;
+
+			text.interactionMode = ScrollText.INTERACTION_MODE_MOUSE;
+			text.scrollBarDisplayMode = ScrollText.SCROLL_BAR_DISPLAY_MODE_FIXED;
+
+			text.verticalScrollPolicy = ScrollText.SCROLL_POLICY_AUTO;
+			text.horizontalScrollPolicy = ScrollText.SCROLL_POLICY_AUTO;
 		}
 
 		protected function itemRendererAccessoryLabelInitializer(renderer:TextFieldTextRenderer):void
@@ -698,16 +707,16 @@ package feathers.themes
 				progress.paddingLeft = 1;
 		}
 
-		protected function scrollerInitializer(scroller:Scroller):void
+		protected function scrollContainerInitializer(container:ScrollContainer):void
 		{
-			scroller.horizontalScrollBarFactory = horizontalScrollBarFactory;
-			scroller.verticalScrollBarFactory = verticalScrollBarFactory;
+			container.horizontalScrollBarFactory = horizontalScrollBarFactory;
+			container.verticalScrollBarFactory = verticalScrollBarFactory;
 
-			scroller.interactionMode = Scroller.INTERACTION_MODE_MOUSE;
-			scroller.scrollBarDisplayMode = Scroller.SCROLL_BAR_DISPLAY_MODE_FIXED;
+			container.interactionMode = ScrollContainer.INTERACTION_MODE_MOUSE;
+			container.scrollBarDisplayMode = ScrollContainer.SCROLL_BAR_DISPLAY_MODE_FIXED;
 
-			scroller.verticalScrollPolicy = Scroller.SCROLL_POLICY_AUTO;
-			scroller.horizontalScrollPolicy = Scroller.SCROLL_POLICY_AUTO;
+			container.verticalScrollPolicy = ScrollContainer.SCROLL_POLICY_AUTO;
+			container.horizontalScrollPolicy = ScrollContainer.SCROLL_POLICY_AUTO;
 		}
 
 		protected function listInitializer(list:List):void
@@ -716,11 +725,6 @@ package feathers.themes
 
 			list.paddingTop = list.paddingRight = list.paddingBottom =
 				list.paddingLeft = 1;
-		}
-
-		protected function groupedListInitializer(list:GroupedList):void
-		{
-			list.backgroundSkin = new Scale9Image(simpleBorderBackgroundSkinTextures);
 
 			const layout:VerticalLayout = new VerticalLayout();
 			layout.useVirtualLayout = true;
@@ -731,19 +735,51 @@ package feathers.themes
 			layout.verticalAlign = VerticalLayout.VERTICAL_ALIGN_TOP;
 			list.layout = layout;
 
+			list.horizontalScrollBarFactory = horizontalScrollBarFactory;
+			list.verticalScrollBarFactory = verticalScrollBarFactory;
+
+			list.interactionMode = List.INTERACTION_MODE_MOUSE;
+			list.scrollBarDisplayMode = List.SCROLL_BAR_DISPLAY_MODE_FIXED;
+
+			list.verticalScrollPolicy = List.SCROLL_POLICY_AUTO;
+			list.horizontalScrollPolicy = List.SCROLL_POLICY_AUTO;
+		}
+
+		protected function groupedListInitializer(list:GroupedList):void
+		{
+			list.backgroundSkin = new Scale9Image(simpleBorderBackgroundSkinTextures);
+
 			list.paddingTop = list.paddingRight = list.paddingBottom =
 				list.paddingLeft = 1;
+
+			const layout:VerticalLayout = new VerticalLayout();
+			layout.useVirtualLayout = true;
+			layout.paddingTop = layout.paddingRight = layout.paddingBottom =
+				layout.paddingLeft = 0;
+			layout.gap = 0;
+			layout.horizontalAlign = VerticalLayout.HORIZONTAL_ALIGN_JUSTIFY;
+			layout.verticalAlign = VerticalLayout.VERTICAL_ALIGN_TOP;
+			list.layout = layout;
+
+			list.horizontalScrollBarFactory = horizontalScrollBarFactory;
+			list.verticalScrollBarFactory = verticalScrollBarFactory;
+
+			list.interactionMode = GroupedList.INTERACTION_MODE_MOUSE;
+			list.scrollBarDisplayMode = GroupedList.SCROLL_BAR_DISPLAY_MODE_FIXED;
+
+			list.verticalScrollPolicy = GroupedList.SCROLL_POLICY_AUTO;
+			list.horizontalScrollPolicy = GroupedList.SCROLL_POLICY_AUTO;
 		}
 
 		protected function pickerListInitializer(list:PickerList):void
 		{
 			list.popUpContentManager = new DropDownPopUpContentManager();
-			list.listProperties.maxHeight = 110;
+		}
 
-			list.listProperties.backgroundSkin = new Scale9Image(simpleBorderBackgroundSkinTextures);
-
-			list.listProperties.paddingTop = list.listProperties.paddingRight = list.listProperties.paddingBottom =
-				list.listProperties.paddingLeft = 1;
+		protected function pickerListListInitializer(list:List):void
+		{
+			this.listInitializer(list);
+			list.maxHeight = 110;
 		}
 
 		protected function defaultItemRendererInitializer(renderer:BaseDefaultItemRenderer):void
@@ -800,6 +836,9 @@ package feathers.themes
 
 			header.paddingTop = header.paddingBottom = 2;
 			header.paddingRight = header.paddingLeft = 6;
+
+			header.gap = 2;
+			header.titleGap = 4;
 		}
 
 		protected function root_addedToStageHandler(event:Event):void

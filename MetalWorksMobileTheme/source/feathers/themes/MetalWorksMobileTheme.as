@@ -34,12 +34,13 @@ package feathers.themes
 	import feathers.controls.Label;
 	import feathers.controls.List;
 	import feathers.controls.PageIndicator;
+	import feathers.controls.Panel;
 	import feathers.controls.PickerList;
 	import feathers.controls.ProgressBar;
 	import feathers.controls.Radio;
 	import feathers.controls.Screen;
+	import feathers.controls.ScrollContainer;
 	import feathers.controls.ScrollText;
-	import feathers.controls.Scroller;
 	import feathers.controls.SimpleScrollBar;
 	import feathers.controls.Slider;
 	import feathers.controls.TabBar;
@@ -418,12 +419,14 @@ package feathers.themes
 			this.setInitializerForClass(ProgressBar, progressBarInitializer);
 			this.setInitializerForClass(PickerList, pickerListInitializer);
 			this.setInitializerForClass(Header, headerInitializer);
+			this.setInitializerForClass(Header, headerWithoutBackgroundInitializer, Panel.DEFAULT_CHILD_NAME_HEADER);
 			this.setInitializerForClass(Callout, calloutInitializer);
-			this.setInitializerForClass(Scroller, scrollerInitializer);
 			this.setInitializerForClass(List, listInitializer);
 			this.setInitializerForClass(List, nothingInitializer, PickerList.DEFAULT_CHILD_NAME_LIST);
 			this.setInitializerForClass(GroupedList, groupedListInitializer);
 			this.setInitializerForClass(GroupedList, insetGroupedListInitializer, GroupedList.ALTERNATE_NAME_INSET_GROUPED_LIST);
+			this.setInitializerForClass(Panel, panelInitializer);
+			this.setInitializerForClass(ScrollContainer, scrollContainerInitializer);
 		}
 
 		protected function pageIndicatorNormalSymbolFactory():DisplayObject
@@ -511,6 +514,9 @@ package feathers.themes
 			text.textFormat = this.smallLightTextFormat;
 			text.paddingTop = text.paddingBottom = text.paddingLeft = 32 * this.scale;
 			text.paddingRight = 36 * this.scale;
+
+			text.verticalScrollBarFactory = this.verticalScrollBarFactory;
+			text.horizontalScrollBarFactory = this.horizontalScrollBarFactory;
 		}
 
 		protected function buttonInitializer(button:Button):void
@@ -951,9 +957,21 @@ package feathers.themes
 			header.minHeight = 88 * this.scale;
 			header.paddingTop = header.paddingRight = header.paddingBottom =
 				header.paddingLeft = 14 * this.scale;
+			header.gap = 8 * this.scale;
+			header.titleGap = 12 * this.scale;
 
 			const backgroundSkin:Quad = new Quad(88 * this.scale, 88 * this.scale, 0x1a1a1a);
 			header.backgroundSkin = backgroundSkin;
+			header.titleProperties.textFormat = this.headerTextFormat;
+		}
+
+		protected function headerWithoutBackgroundInitializer(header:Header):void
+		{
+			header.minWidth = 88 * this.scale;
+			header.minHeight = 88 * this.scale;
+			header.paddingTop = header.paddingRight = header.paddingBottom =
+				header.paddingLeft = 14 * this.scale;
+
 			header.titleProperties.textFormat = this.headerTextFormat;
 		}
 
@@ -979,7 +997,9 @@ package feathers.themes
 			layout.paddingTop = layout.paddingRight = layout.paddingBottom =
 				layout.paddingLeft = 0;
 			list.listProperties.layout = layout;
-			list.listProperties.@scrollerProperties.verticalScrollPolicy = Scroller.SCROLL_POLICY_ON;
+			list.listProperties.verticalScrollPolicy = List.SCROLL_POLICY_ON;
+			list.listProperties.verticalScrollBarFactory = this.verticalScrollBarFactory;
+			list.listProperties.horizontalScrollBarFactory = this.horizontalScrollBarFactory;
 
 			if(DeviceCapabilities.isTablet(Starling.current.nativeStage))
 			{
@@ -1020,26 +1040,44 @@ package feathers.themes
 			leftArrowSkin.scaleX = leftArrowSkin.scaleY = this.scale;
 			callout.leftArrowSkin = leftArrowSkin;
 
-			callout.paddingTop = callout.paddingRight = callout.paddingBottom =
-				callout.paddingLeft = 8 * this.scale;
+			callout.padding = 8 * this.scale;
 		}
 
-		protected function scrollerInitializer(scroller:Scroller):void
+		protected function panelInitializer(panel:Panel):void
 		{
-			scroller.verticalScrollBarFactory = this.verticalScrollBarFactory;
-			scroller.horizontalScrollBarFactory = this.horizontalScrollBarFactory;
+			const backgroundSkin:Scale9Image = new Scale9Image(this.backgroundDisabledSkinTextures, this.scale);
+			panel.backgroundSkin = backgroundSkin;
+
+			panel.paddingTop = 0;
+			panel.paddingRight = 8 * this.scale;
+			panel.paddingBottom = 8 * this.scale;
+			panel.paddingLeft = 8 * this.scale;
+
+			panel.verticalScrollBarFactory = this.verticalScrollBarFactory;
+			panel.horizontalScrollBarFactory = this.horizontalScrollBarFactory;
 		}
 
 		protected function listInitializer(list:List):void
 		{
 			const backgroundSkin:Quad = new Quad(100, 100, LIST_BACKGROUND_COLOR);
 			list.backgroundSkin = backgroundSkin;
+
+			list.verticalScrollBarFactory = this.verticalScrollBarFactory;
+			list.horizontalScrollBarFactory = this.horizontalScrollBarFactory;
 		}
 
 		protected function groupedListInitializer(list:GroupedList):void
 		{
 			const backgroundSkin:Quad = new Quad(100, 100, LIST_BACKGROUND_COLOR);
 			list.backgroundSkin = backgroundSkin;
+			list.verticalScrollBarFactory = this.verticalScrollBarFactory;
+			list.horizontalScrollBarFactory = this.horizontalScrollBarFactory;
+		}
+
+		protected function scrollContainerInitializer(container:ScrollContainer):void
+		{
+			container.verticalScrollBarFactory = this.verticalScrollBarFactory;
+			container.horizontalScrollBarFactory = this.horizontalScrollBarFactory;
 		}
 
 		protected function insetGroupedListInitializer(list:GroupedList):void
@@ -1053,8 +1091,7 @@ package feathers.themes
 
 			const layout:VerticalLayout = new VerticalLayout();
 			layout.useVirtualLayout = true;
-			layout.paddingTop = layout.paddingRight = layout.paddingBottom =
-				layout.paddingLeft = 18 * this.scale;
+			layout.padding = 18 * this.scale;
 			layout.gap = 0;
 			layout.horizontalAlign = VerticalLayout.HORIZONTAL_ALIGN_JUSTIFY;
 			layout.verticalAlign = VerticalLayout.VERTICAL_ALIGN_TOP;

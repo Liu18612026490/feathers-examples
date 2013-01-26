@@ -39,7 +39,6 @@ package feathers.themes
 	import feathers.controls.Radio;
 	import feathers.controls.Screen;
 	import feathers.controls.ScrollText;
-	import feathers.controls.Scroller;
 	import feathers.controls.SimpleScrollBar;
 	import feathers.controls.Slider;
 	import feathers.controls.TabBar;
@@ -692,7 +691,7 @@ package feathers.themes
 			layout.paddingTop = layout.paddingRight = layout.paddingBottom =
 				layout.paddingLeft = 0;
 			list.listProperties.layout = layout;
-			list.listProperties.@scrollerProperties.verticalScrollPolicy = Scroller.SCROLL_POLICY_ON;
+			list.listProperties.verticalScrollPolicy = List.SCROLL_POLICY_ON;
 
 			if(DeviceCapabilities.isTablet(Starling.current.nativeStage))
 			{
@@ -729,6 +728,8 @@ package feathers.themes
 			header.minHeight = 88 * this.scale;
 			header.paddingTop = header.paddingRight = header.paddingBottom =
 				header.paddingLeft = 14 * this.scale;
+			header.gap = 8 * this.scale;
+			header.titleGap = 12 * this.scale;
 			const backgroundSkin:Scale9Image = new Scale9Image(headerSkinTextures, this.scale);
 			backgroundSkin.width = 88 * this.scale;
 			backgroundSkin.height = 88 * this.scale;
