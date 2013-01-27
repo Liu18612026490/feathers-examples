@@ -2,8 +2,12 @@ package feathers.examples.componentsExplorer.screens
 {
 	import feathers.controls.Header;
 	import feathers.controls.List;
+	import feathers.controls.PanelScreen;
 	import feathers.controls.Screen;
 	import feathers.data.ListCollection;
+	import feathers.events.FeathersEventType;
+	import feathers.layout.AnchorLayout;
+	import feathers.layout.AnchorLayoutData;
 	import feathers.skins.StandardIcons;
 	import feathers.system.DeviceCapabilities;
 
@@ -27,7 +31,7 @@ package feathers.examples.componentsExplorer.screens
 	[Event(name="showTextInput",type="starling.events.Event")]
 	[Event(name="showToggles",type="starling.events.Event")]
 
-	public class MainMenuScreen extends Screen
+	public class MainMenuScreen extends PanelScreen
 	{
 		public static const SHOW_BUTTON:String = "showButton";
 		public static const SHOW_BUTTON_GROUP:String = "showButtonGroup";
@@ -46,16 +50,16 @@ package feathers.examples.componentsExplorer.screens
 		public function MainMenuScreen()
 		{
 			super();
+			this.addEventListener(FeathersEventType.INITIALIZE, initializeHandler);
 		}
 
-		private var _header:Header;
 		private var _list:List;
 		
-		override protected function initialize():void
+		protected function initializeHandler(event:Event):void
 		{
-			this._header = new Header();
-			this._header.title = "Feathers";
-			this.addChild(this._header);
+			this.layout = new AnchorLayout();
+
+			this.headerProperties.title = "Feathers";
 
 			this._list = new List();
 			this._list.dataProvider = new ListCollection(
@@ -74,8 +78,12 @@ package feathers.examples.componentsExplorer.screens
 				{ label: "Text Input", event: SHOW_TEXT_INPUT },
 				{ label: "Toggles", event: SHOW_TOGGLES },
 			]);
+
+			const listLayoutData:AnchorLayoutData = new AnchorLayoutData();
+			listLayoutData.top = listLayoutData.right = listLayoutData.bottom = listLayoutData.left = 0;
+			this._list.layoutData = listLayoutData;
+
 			this._list.addEventListener(Event.CHANGE, list_changeHandler);
-			this._list.itemRendererProperties.labelField = "label";
 			if(!DeviceCapabilities.isTablet(Starling.current.nativeStage))
 			{
 				this._list.itemRendererProperties.accessorySourceFunction = accessorySourceFunction;
@@ -84,17 +92,8 @@ package feathers.examples.componentsExplorer.screens
 			{
 				this._list.selectedIndex = 0;
 			}
+			this._list.itemRendererProperties.labelField = "label";
 			this.addChild(this._list);
-		}
-		
-		override protected function draw():void
-		{
-			this._header.width = this.actualWidth;
-			this._header.validate();
-
-			this._list.y = this._header.height;
-			this._list.width = this.actualWidth;
-			this._list.height = this.actualHeight - this._list.y;
 		}
 
 		private function accessorySourceFunction(item:Object):Texture

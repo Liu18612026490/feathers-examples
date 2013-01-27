@@ -4,6 +4,7 @@ package feathers.examples.componentsExplorer.screens
 	import feathers.controls.Header;
 	import feathers.controls.ImageLoader;
 	import feathers.controls.Screen;
+	import feathers.events.FeathersEventType;
 	import feathers.examples.componentsExplorer.data.ButtonSettings;
 	import feathers.system.DeviceCapabilities;
 

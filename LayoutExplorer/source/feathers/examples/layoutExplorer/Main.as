@@ -3,7 +3,6 @@ package feathers.examples.layoutExplorer
 	import feathers.controls.ScreenNavigator;
 	import feathers.controls.ScreenNavigatorItem;
 	import feathers.controls.ScrollContainer;
-	import feathers.controls.Scroller;
 	import feathers.examples.layoutExplorer.data.HorizontalLayoutSettings;
 	import feathers.examples.layoutExplorer.data.TiledColumnsLayoutSettings;
 	import feathers.examples.layoutExplorer.data.TiledRowsLayoutSettings;
@@ -24,7 +23,6 @@ package feathers.examples.layoutExplorer
 	import feathers.themes.MetalWorksMobileTheme;
 
 	import starling.core.Starling;
-
 	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.events.ResizeEvent;
@@ -151,8 +149,8 @@ package feathers.examples.layoutExplorer
 
 				this._container = new ScrollContainer();
 				this._container.layout = new AnchorLayout();
-				this._container.scrollerProperties.horizontalScrollPolicy = Scroller.SCROLL_POLICY_OFF;
-				this._container.scrollerProperties.verticalScrollPolicy = Scroller.SCROLL_POLICY_OFF;
+				this._container.horizontalScrollPolicy = ScrollContainer.SCROLL_POLICY_OFF;
+				this._container.verticalScrollPolicy = ScrollContainer.SCROLL_POLICY_OFF;
 				this.addChild(this._container);
 
 				this._menu = new MainMenuScreen();

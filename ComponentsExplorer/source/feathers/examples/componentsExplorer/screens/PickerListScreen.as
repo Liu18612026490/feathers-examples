@@ -45,7 +45,7 @@ package feathers.examples.componentsExplorer.screens
 			//the typical item helps us set an ideal width for the button
 			//if we don't use a typical item, the button will resize to fit
 			//the currently selected item.
-			this._list.typicalItem = { text: "Item 1000"};
+			this._list.typicalItem = { text: "Select an Item" };
 			this._list.labelField = "text";
 
 			//notice that we're setting typicalItem on the list separately. we

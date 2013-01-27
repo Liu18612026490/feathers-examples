@@ -1,7 +1,6 @@
 package feathers.examples.gallery
 {
 	import feathers.controls.List;
-	import feathers.controls.Scroller;
 	import feathers.controls.text.TextFieldTextRenderer;
 	import feathers.data.ListCollection;
 	import feathers.layout.HorizontalLayout;
@@ -119,8 +118,8 @@ package feathers.examples.gallery
 			this.list = new List();
 			this.list.layout = listLayout;
 			this.list.backgroundSkin = new Quad(100, 100, 0x222222);
-			this.list.scrollerProperties.horizontalScrollPolicy = Scroller.SCROLL_POLICY_ON;
-			this.list.scrollerProperties.snapScrollPositionsToPixels = true;
+			this.list.horizontalScrollPolicy = List.SCROLL_POLICY_ON;
+			this.list.snapScrollPositionsToPixels = true;
 			this.list.itemRendererType = GalleryItemRenderer;
 			this.list.addEventListener(starling.events.Event.CHANGE, list_changeHandler);
 			this.addChild(this.list);

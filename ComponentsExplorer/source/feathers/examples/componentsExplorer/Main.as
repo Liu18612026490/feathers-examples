@@ -3,7 +3,6 @@ package feathers.examples.componentsExplorer
 	import feathers.controls.ScreenNavigator;
 	import feathers.controls.ScreenNavigatorItem;
 	import feathers.controls.ScrollContainer;
-	import feathers.controls.Scroller;
 	import feathers.examples.componentsExplorer.data.ButtonSettings;
 	import feathers.examples.componentsExplorer.data.GroupedListSettings;
 	import feathers.examples.componentsExplorer.data.ListSettings;
@@ -226,8 +225,8 @@ package feathers.examples.componentsExplorer
 
 				this._container = new ScrollContainer();
 				this._container.layout = new AnchorLayout();
-				this._container.scrollerProperties.horizontalScrollPolicy = Scroller.SCROLL_POLICY_OFF;
-				this._container.scrollerProperties.verticalScrollPolicy = Scroller.SCROLL_POLICY_OFF;
+				this._container.horizontalScrollPolicy = ScrollContainer.SCROLL_POLICY_OFF;
+				this._container.verticalScrollPolicy = ScrollContainer.SCROLL_POLICY_OFF;
 				this.addChild(this._container);
 
 				this._menu = new MainMenuScreen();
@@ -235,7 +234,6 @@ package feathers.examples.componentsExplorer
 				{
 					this._menu.addEventListener(eventType, mainMenuEventHandler);
 				}
-				this._menu.width = 400 * DeviceCapabilities.dpi / this._theme.originalDPI;
 				const menuLayoutData:AnchorLayoutData = new AnchorLayoutData();
 				menuLayoutData.top = 0;
 				menuLayoutData.bottom = 0;

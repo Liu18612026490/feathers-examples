@@ -46,7 +46,7 @@ package feathers.examples.componentsExplorer.screens
 			this._list.dataProvider = new ListCollection(items);
 			this._list.typicalItem = {text: "Item 1000"};
 			this._list.isSelectable = this.settings.isSelectable;
-			this._list.scrollerProperties.hasElasticEdges = this.settings.hasElasticEdges;
+			this._list.hasElasticEdges = this.settings.hasElasticEdges;
 			this._list.itemRendererProperties.labelField = "text";
 			this._list.addEventListener(Event.CHANGE, list_changeHandler);
 			this.addChildAt(this._list, 0);

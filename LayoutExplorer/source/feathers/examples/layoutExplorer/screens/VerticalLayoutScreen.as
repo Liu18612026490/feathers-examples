@@ -4,13 +4,11 @@ package feathers.examples.layoutExplorer.screens
 	import feathers.controls.Header;
 	import feathers.controls.Screen;
 	import feathers.controls.ScrollContainer;
-	import feathers.controls.Scroller;
 	import feathers.examples.layoutExplorer.data.VerticalLayoutSettings;
 	import feathers.layout.VerticalLayout;
 	import feathers.system.DeviceCapabilities;
 
 	import starling.core.Starling;
-
 	import starling.display.DisplayObject;
 	import starling.display.Quad;
 	import starling.events.Event;
@@ -50,8 +48,8 @@ package feathers.examples.layoutExplorer.screens
 			this._container.layout = layout;
 			//when the scroll policy is set to on, the "elastic" edges will be
 			//active even when the max scroll position is zero
-			this._container.scrollerProperties.verticalScrollPolicy = Scroller.SCROLL_POLICY_ON;
-			this._container.scrollerProperties.snapScrollPositionsToPixels = true;
+			this._container.verticalScrollPolicy = ScrollContainer.SCROLL_POLICY_ON;
+			this._container.snapScrollPositionsToPixels = true;
 			this.addChild(this._container);
 			for(var i:int = 0; i < this.settings.itemCount; i++)
 			{

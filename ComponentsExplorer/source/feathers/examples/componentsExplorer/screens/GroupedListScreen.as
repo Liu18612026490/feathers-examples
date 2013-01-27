@@ -9,7 +9,6 @@ package feathers.examples.componentsExplorer.screens
 	import feathers.system.DeviceCapabilities;
 
 	import starling.core.Starling;
-
 	import starling.display.DisplayObject;
 	import starling.events.Event;
 
@@ -100,7 +99,7 @@ package feathers.examples.componentsExplorer.screens
 			this._list.typicalHeader = "Group 10";
 			this._list.typicalFooter = "Footer 10";
 			this._list.isSelectable = this.settings.isSelectable;
-			this._list.scrollerProperties.hasElasticEdges = this.settings.hasElasticEdges;
+			this._list.hasElasticEdges = this.settings.hasElasticEdges;
 			this._list.itemRendererProperties.labelField = "text";
 			this._list.addEventListener(Event.CHANGE, list_changeHandler);
 			this.addChildAt(this._list, 0);

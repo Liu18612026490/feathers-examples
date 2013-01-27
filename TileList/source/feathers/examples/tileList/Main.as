@@ -3,7 +3,6 @@ package feathers.examples.tileList
 	import feathers.controls.Button;
 	import feathers.controls.List;
 	import feathers.controls.PageIndicator;
-	import feathers.controls.Scroller;
 	import feathers.controls.renderers.DefaultListItemRenderer;
 	import feathers.controls.renderers.IListItemRenderer;
 	import feathers.data.ListCollection;
@@ -107,9 +106,9 @@ package feathers.examples.tileList
 			this._list = new List();
 			this._list.dataProvider = collection;
 			this._list.layout = listLayout;
-			this._list.scrollerProperties.snapToPages = true;
-			this._list.scrollerProperties.scrollBarDisplayMode = Scroller.SCROLL_BAR_DISPLAY_MODE_NONE;
-			this._list.scrollerProperties.horizontalScrollPolicy = Scroller.SCROLL_POLICY_ON;
+			this._list.snapToPages = true;
+			this._list.scrollBarDisplayMode = List.SCROLL_BAR_DISPLAY_MODE_NONE;
+			this._list.horizontalScrollPolicy = List.SCROLL_POLICY_ON;
 			this._list.itemRendererFactory = tileListItemRendererFactory;
 			this._list.addEventListener(Event.SCROLL, list_scrollHandler);
 			this.addChild(this._list);

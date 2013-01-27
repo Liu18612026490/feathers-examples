@@ -50,8 +50,8 @@ package feathers.examples.layoutExplorer.screens
 
 			this._container = new ScrollContainer();
 			this._container.layout = layout;
-			this._container.scrollerProperties.snapToPages = this.settings.paging != TiledColumnsLayout.PAGING_NONE;
-			this._container.scrollerProperties.snapScrollPositionsToPixels = true;
+			this._container.snapToPages = this.settings.paging != TiledColumnsLayout.PAGING_NONE;
+			this._container.snapScrollPositionsToPixels = true;
 			this.addChild(this._container);
 			for(var i:int = 0; i < this.settings.itemCount; i++)
 			{
