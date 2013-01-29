@@ -1,29 +1,31 @@
 package feathers.examples.componentsExplorer.screens
 {
 	import feathers.controls.Button;
-	import feathers.controls.Header;
 	import feathers.controls.List;
+	import feathers.controls.PanelScreen;
 	import feathers.controls.PickerList;
-	import feathers.controls.Screen;
 	import feathers.controls.Slider;
 	import feathers.controls.ToggleSwitch;
 	import feathers.data.ListCollection;
+	import feathers.events.FeathersEventType;
 	import feathers.examples.componentsExplorer.data.ButtonSettings;
+	import feathers.layout.AnchorLayout;
+	import feathers.layout.AnchorLayoutData;
 
 	import starling.display.DisplayObject;
 	import starling.events.Event;
 
 	[Event(name="complete",type="starling.events.Event")]
 
-	public class ButtonSettingsScreen extends Screen
+	public class ButtonSettingsScreen extends PanelScreen
 	{
 		public function ButtonSettingsScreen()
 		{
+			this.addEventListener(FeathersEventType.INITIALIZE, initializeHandler);
 		}
 
 		public var settings:ButtonSettings;
 
-		private var _header:Header;
 		private var _list:List;
 		private var _backButton:Button;
 
@@ -35,8 +37,10 @@ package feathers.examples.componentsExplorer.screens
 		private var _iconOffsetXSlider:Slider;
 		private var _iconOffsetYSlider:Slider;
 
-		override protected function initialize():void
+		protected function initializeHandler(event:Event):void
 		{
+			this.layout = new AnchorLayout();
+
 			this._isToggleToggle = new ToggleSwitch();
 			this._isToggleToggle.isSelected = this.settings.isToggle;
 			this._isToggleToggle.addEventListener(Event.CHANGE, isToggleToggle_changeHandler);
@@ -112,31 +116,20 @@ package feathers.examples.componentsExplorer.screens
 				{ label: "iconOffsetX", accessory: this._iconOffsetXSlider },
 				{ label: "iconOffsetY", accessory: this._iconOffsetYSlider }
 			]);
+			this._list.layoutData = new AnchorLayoutData(0, 0, 0, 0);
 			this.addChild(this._list);
 
 			this._backButton = new Button();
 			this._backButton.label = "Back";
 			this._backButton.addEventListener(Event.TRIGGERED, backButton_triggeredHandler);
 
-			this._header = new Header();
-			this._header.title = "Button Settings";
-			this.addChild(this._header);
-			this._header.leftItems = new <DisplayObject>
+			this.headerProperties.title = "Button Settings";
+			this.headerProperties.leftItems = new <DisplayObject>
 			[
 				this._backButton
 			];
 
 			this.backButtonHandler = this.onBackButton;
-		}
-
-		override protected function draw():void
-		{
-			this._header.width = this.actualWidth;
-			this._header.validate();
-
-			this._list.y = this._header.height;
-			this._list.width = this.actualWidth;
-			this._list.height = this.actualHeight - this._list.y;
 		}
 
 		private function onBackButton():void

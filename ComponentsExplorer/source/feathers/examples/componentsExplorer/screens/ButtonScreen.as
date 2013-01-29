@@ -1,23 +1,23 @@
 package feathers.examples.componentsExplorer.screens
 {
 	import feathers.controls.Button;
-	import feathers.controls.Header;
 	import feathers.controls.ImageLoader;
-	import feathers.controls.Screen;
+	import feathers.controls.PanelScreen;
 	import feathers.events.FeathersEventType;
 	import feathers.examples.componentsExplorer.data.ButtonSettings;
+	import feathers.layout.AnchorLayout;
+	import feathers.layout.AnchorLayoutData;
 	import feathers.system.DeviceCapabilities;
 
 	import starling.core.Starling;
 	import starling.display.DisplayObject;
-	import starling.display.Image;
 	import starling.events.Event;
 	import starling.textures.Texture;
 
 	[Event(name="complete",type="starling.events.Event")]
 	[Event(name="showSettings",type="starling.events.Event")]
 
-	public class ButtonScreen extends Screen
+	public class ButtonScreen extends PanelScreen
 	{
 		[Embed(source="/../assets/images/skull.png")]
 		private static const SKULL_ICON:Class;
@@ -27,12 +27,12 @@ package feathers.examples.componentsExplorer.screens
 		public function ButtonScreen()
 		{
 			super();
+			this.addEventListener(FeathersEventType.INITIALIZE, initializeHandler);
 		}
 
 		public var settings:ButtonSettings;
 
 		private var _button:Button;
-		private var _header:Header;
 		private var _backButton:Button;
 		private var _settingsButton:Button;
 		
@@ -49,8 +49,10 @@ package feathers.examples.componentsExplorer.screens
 			super.dispose();
 		}
 		
-		override protected function initialize():void
+		protected function initializeHandler(event:Event):void
 		{
+			this.layout = new AnchorLayout();
+
 			this._iconTexture = Texture.fromBitmap(new SKULL_ICON());
 			this._icon = new ImageLoader();
 			this._icon.source = this._iconTexture;
@@ -73,12 +75,14 @@ package feathers.examples.componentsExplorer.screens
 			this._button.iconOffsetY = this.settings.iconOffsetY;
 			this._button.width = 264 * this.dpiScale;
 			this._button.height = 264 * this.dpiScale;
+			const buttonLayoutData:AnchorLayoutData = new AnchorLayoutData();
+			buttonLayoutData.horizontalCenter = 0;
+			buttonLayoutData.verticalCenter = 0;
+			this._button.layoutData = buttonLayoutData;
 			this._button.addEventListener(Event.TRIGGERED, button_triggeredHandler);
 			this.addChild(this._button);
 
-			this._header = new Header();
-			this._header.title = "Button";
-			this.addChild(this._header);
+			this.headerProperties.title = "Button";
 
 			if(!DeviceCapabilities.isTablet(Starling.current.nativeStage))
 			{
@@ -86,7 +90,7 @@ package feathers.examples.componentsExplorer.screens
 				this._backButton.label = "Back";
 				this._backButton.addEventListener(Event.TRIGGERED, backButton_triggeredHandler);
 
-				this._header.leftItems = new <DisplayObject>
+				this.headerProperties.leftItems = new <DisplayObject>
 				[
 					this._backButton
 				];
@@ -96,23 +100,13 @@ package feathers.examples.componentsExplorer.screens
 			this._settingsButton.label = "Settings";
 			this._settingsButton.addEventListener(Event.TRIGGERED, settingsButton_triggeredHandler);
 
-			this._header.rightItems = new <DisplayObject>
+			this.headerProperties.rightItems = new <DisplayObject>
 			[
 				this._settingsButton
 			];
 			
 			// handles the back hardware key on android
 			this.backButtonHandler = this.onBackButton;
-		}
-		
-		override protected function draw():void
-		{
-			this._header.width = this.actualWidth;
-			this._header.validate();
-
-			this._button.validate();
-			this._button.x = (this.actualWidth - this._button.width) / 2;
-			this._button.y = this._header.height + (this.actualHeight - this._header.height - this._button.height) / 2;
 		}
 		
 		private function onBackButton():void

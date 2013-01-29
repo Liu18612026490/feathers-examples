@@ -1,9 +1,11 @@
 package feathers.examples.componentsExplorer.screens
 {
 	import feathers.controls.Button;
-	import feathers.controls.Header;
+	import feathers.controls.PanelScreen;
 	import feathers.controls.ProgressBar;
-	import feathers.controls.Screen;
+	import feathers.events.FeathersEventType;
+	import feathers.layout.AnchorLayout;
+	import feathers.layout.AnchorLayoutData;
 	import feathers.system.DeviceCapabilities;
 
 	import starling.animation.Tween;
@@ -13,29 +15,33 @@ package feathers.examples.componentsExplorer.screens
 
 	[Event(name="complete",type="starling.events.Event")]
 
-	public class ProgressBarScreen extends Screen
+	public class ProgressBarScreen extends PanelScreen
 	{
 		public function ProgressBarScreen()
 		{
+			this.addEventListener(FeathersEventType.INITIALIZE, initializeHandler);
 		}
 
-		private var _header:Header;
 		private var _backButton:Button;
 		private var _progress:ProgressBar;
 
 		private var _progressTween:Tween;
 
-		override protected function initialize():void
+		protected function initializeHandler(event:Event):void
 		{
+			this.layout = new AnchorLayout();
+
 			this._progress = new ProgressBar();
 			this._progress.minimum = 0;
 			this._progress.maximum = 1;
 			this._progress.value = 0;
+			const progressLayoutData:AnchorLayoutData = new AnchorLayoutData();
+			progressLayoutData.horizontalCenter = 0;
+			progressLayoutData.verticalCenter = 0;
+			this._progress.layoutData = progressLayoutData;
 			this.addChild(this._progress);
 
-			this._header = new Header();
-			this._header.title = "Progress Bar";
-			this.addChild(this._header);
+			this.headerProperties.title = "Progress Bar";
 
 			if(!DeviceCapabilities.isTablet(Starling.current.nativeStage))
 			{
@@ -43,7 +49,7 @@ package feathers.examples.componentsExplorer.screens
 				this._backButton.label = "Back";
 				this._backButton.addEventListener(Event.TRIGGERED, backButton_triggeredHandler);
 
-				this._header.leftItems = new <DisplayObject>
+				this.headerProperties.leftItems = new <DisplayObject>
 				[
 					this._backButton
 				];
@@ -56,16 +62,6 @@ package feathers.examples.componentsExplorer.screens
 			this._progressTween.animate("value", 1);
 			this._progressTween.repeatCount = int.MAX_VALUE;
 			Starling.juggler.add(this._progressTween);
-		}
-
-		override protected function draw():void
-		{
-			this._header.width = this.actualWidth;
-			this._header.validate();
-
-			this._progress.validate();
-			this._progress.x = (this.actualWidth - this._progress.width) / 2;
-			this._progress.y = this._header.height + (this.actualHeight - this._header.height - this._progress.height) / 2;
 		}
 
 		private function onBackButton():void

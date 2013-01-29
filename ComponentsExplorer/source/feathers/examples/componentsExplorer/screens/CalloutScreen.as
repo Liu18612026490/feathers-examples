@@ -2,58 +2,77 @@ package feathers.examples.componentsExplorer.screens
 {
 	import feathers.controls.Button;
 	import feathers.controls.Callout;
-	import feathers.controls.Header;
 	import feathers.controls.Label;
-	import feathers.controls.Screen;
+	import feathers.controls.PanelScreen;
+	import feathers.events.FeathersEventType;
+	import feathers.layout.AnchorLayout;
+	import feathers.layout.AnchorLayoutData;
 	import feathers.system.DeviceCapabilities;
 
 	import starling.core.Starling;
-
 	import starling.display.DisplayObject;
 	import starling.events.Event;
 
 	[Event(name="complete",type="starling.events.Event")]
 
-	public class CalloutScreen extends Screen
+	public class CalloutScreen extends PanelScreen
 	{
 		private static const CONTENT_TEXT:String = "Thank you for trying Feathers.\nHappy coding.";
 
 		public function CalloutScreen()
 		{
+			this.addEventListener(FeathersEventType.INITIALIZE, initializeHandler);
 		}
 
 		private var _rightButton:Button;
 		private var _downButton:Button;
 		private var _upButton:Button;
 		private var _leftButton:Button;
-		private var _header:Header;
 		private var _backButton:Button;
 
-		override protected function initialize():void
+		protected function initializeHandler(event:Event):void
 		{
+			this.layout = new AnchorLayout();
+
+			const margin:Number = 20 * this.dpiScale;
+
 			this._rightButton = new Button();
 			this._rightButton.label = "Right";
 			this._rightButton.addEventListener(Event.TRIGGERED, rightButton_triggeredHandler);
+			const rightButtonLayoutData:AnchorLayoutData = new AnchorLayoutData();
+			rightButtonLayoutData.top = margin;
+			rightButtonLayoutData.left = margin;
+			this._rightButton.layoutData = rightButtonLayoutData;
 			this.addChild(this._rightButton);
 
 			this._downButton = new Button();
 			this._downButton.label = "Down";
 			this._downButton.addEventListener(Event.TRIGGERED, downButton_triggeredHandler);
+			const downButtonLayoutData:AnchorLayoutData = new AnchorLayoutData();
+			downButtonLayoutData.top = margin;
+			downButtonLayoutData.right = margin;
+			this._downButton.layoutData = downButtonLayoutData;
 			this.addChild(this._downButton);
 
 			this._upButton = new Button();
 			this._upButton.label = "Up";
 			this._upButton.addEventListener(Event.TRIGGERED, upButton_triggeredHandler);
+			const upButtonLayoutData:AnchorLayoutData = new AnchorLayoutData();
+			upButtonLayoutData.bottom = margin;
+			upButtonLayoutData.left = margin;
+			this._upButton.layoutData = upButtonLayoutData;
 			this.addChild(this._upButton);
 
 			this._leftButton = new Button();
 			this._leftButton.label = "Left";
 			this._leftButton.addEventListener(Event.TRIGGERED, leftButton_triggeredHandler);
+			const leftButtonLayoutData:AnchorLayoutData = new AnchorLayoutData();
+			leftButtonLayoutData.right = margin;
+			leftButtonLayoutData.bottom = margin;
+			this._leftButton.layoutData = leftButtonLayoutData;
 			this.addChild(this._leftButton);
 
-			this._header = new Header();
-			this._header.title = "Callout";
-			this.addChild(this._header);
+			this.headerProperties.title = "Callout";
 
 			if(!DeviceCapabilities.isTablet(Starling.current.nativeStage))
 			{
@@ -61,7 +80,7 @@ package feathers.examples.componentsExplorer.screens
 				this._backButton.label = "Back";
 				this._backButton.addEventListener(Event.TRIGGERED, backButton_triggeredHandler);
 
-				this._header.leftItems = new <DisplayObject>
+				this.headerProperties.leftItems = new <DisplayObject>
 				[
 					this._backButton
 				];
@@ -69,30 +88,6 @@ package feathers.examples.componentsExplorer.screens
 
 			// handles the back hardware key on android
 			this.backButtonHandler = this.onBackButton;
-		}
-
-		override protected function draw():void
-		{
-			this._header.width = this.actualWidth;
-			this._header.validate();
-
-			const margin:Number = this._header.height * 0.25;
-
-			this._rightButton.validate();
-			this._rightButton.x = margin;
-			this._rightButton.y = this._header.height + margin;
-
-			this._downButton.validate();
-			this._downButton.x = this.actualWidth - this._downButton.width - margin;
-			this._downButton.y = this._header.height + margin;
-
-			this._upButton.validate();
-			this._upButton.x = margin;
-			this._upButton.y = this.actualHeight - this._upButton.height - margin;
-
-			this._leftButton.validate();
-			this._leftButton.x = this.actualWidth - this._leftButton.width - margin;
-			this._leftButton.y = this.actualHeight - this._leftButton.height - margin;
 		}
 
 		private function onBackButton():void

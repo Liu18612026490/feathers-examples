@@ -78,11 +78,7 @@ package feathers.examples.componentsExplorer.screens
 				{ label: "Text Input", event: SHOW_TEXT_INPUT },
 				{ label: "Toggles", event: SHOW_TOGGLES },
 			]);
-
-			const listLayoutData:AnchorLayoutData = new AnchorLayoutData();
-			listLayoutData.top = listLayoutData.right = listLayoutData.bottom = listLayoutData.left = 0;
-			this._list.layoutData = listLayoutData;
-
+			this._list.layoutData = new AnchorLayoutData(0, 0, 0, 0);
 			this._list.addEventListener(Event.CHANGE, list_changeHandler);
 			if(!DeviceCapabilities.isTablet(Starling.current.nativeStage))
 			{

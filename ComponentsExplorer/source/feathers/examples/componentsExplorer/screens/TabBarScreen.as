@@ -1,33 +1,36 @@
 package feathers.examples.componentsExplorer.screens
 {
 	import feathers.controls.Button;
-	import feathers.controls.Header;
 	import feathers.controls.Label;
-	import feathers.controls.Screen;
+	import feathers.controls.PanelScreen;
 	import feathers.controls.TabBar;
 	import feathers.data.ListCollection;
+	import feathers.events.FeathersEventType;
+	import feathers.layout.AnchorLayout;
+	import feathers.layout.AnchorLayoutData;
 	import feathers.system.DeviceCapabilities;
 
 	import starling.core.Starling;
-
 	import starling.display.DisplayObject;
 	import starling.events.Event;
 
 	[Event(name="complete",type="starling.events.Event")]
 
-	public class TabBarScreen extends Screen
+	public class TabBarScreen extends PanelScreen
 	{
 		public function TabBarScreen()
 		{
+			this.addEventListener(FeathersEventType.INITIALIZE, initializeHandler);
 		}
 
-		private var _header:Header;
 		private var _backButton:Button;
 		private var _tabBar:TabBar;
 		private var _label:Label;
 
-		override protected function initialize():void
+		protected function initializeHandler(event:Event):void
 		{
+			this.layout = new AnchorLayout();
+
 			this._tabBar = new TabBar();
 			this._tabBar.dataProvider = new ListCollection(
 			[
@@ -36,15 +39,18 @@ package feathers.examples.componentsExplorer.screens
 				{ label: "Three" },
 			]);
 			this._tabBar.addEventListener(Event.CHANGE, tabBar_changeHandler);
+			this._tabBar.layoutData = new AnchorLayoutData(NaN, 0, 0, 0);
 			this.addChild(this._tabBar);
 
 			this._label = new Label();
 			this._label.text = "selectedIndex: " + this._tabBar.selectedIndex.toString();
+			const labelLayoutData:AnchorLayoutData = new AnchorLayoutData();
+			labelLayoutData.horizontalCenter = 0;
+			labelLayoutData.verticalCenter = 0;
+			this._label.layoutData = labelLayoutData;
 			this.addChild(DisplayObject(this._label));
 
-			this._header = new Header();
-			this._header.title = "Tab Bar";
-			this.addChild(this._header);
+			this.headerProperties.title = "Tab Bar";
 
 			if(!DeviceCapabilities.isTablet(Starling.current.nativeStage))
 			{
@@ -52,7 +58,7 @@ package feathers.examples.componentsExplorer.screens
 				this._backButton.label = "Back";
 				this._backButton.addEventListener(Event.TRIGGERED, backButton_triggeredHandler);
 
-				this._header.leftItems = new <DisplayObject>
+				this.headerProperties.leftItems = new <DisplayObject>
 				[
 					this._backButton
 				];
@@ -60,20 +66,6 @@ package feathers.examples.componentsExplorer.screens
 
 			// handles the back hardware key on android
 			this.backButtonHandler = this.onBackButton;
-		}
-
-		override protected function draw():void
-		{
-			this._header.width = this.actualWidth;
-			this._header.validate();
-
-			this._tabBar.width = this.actualWidth;
-			this._tabBar.validate();
-			this._tabBar.y = this.actualHeight - this._tabBar.height;
-
-			this._label.validate();
-			this._label.x = (this.actualWidth - this._label.width) / 2;
-			this._label.y = this._header.height + (this.actualHeight - this._header.height - this._tabBar.height - this._label.height) / 2;
 		}
 
 		private function onBackButton():void

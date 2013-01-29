@@ -2,8 +2,12 @@ package feathers.examples.componentsExplorer.screens
 {
 	import feathers.controls.Button;
 	import feathers.controls.Header;
+	import feathers.controls.PanelScreen;
 	import feathers.controls.Screen;
 	import feathers.controls.TextInput;
+	import feathers.events.FeathersEventType;
+	import feathers.layout.AnchorLayout;
+	import feathers.layout.AnchorLayoutData;
 	import feathers.system.DeviceCapabilities;
 
 	import starling.core.Starling;
@@ -13,24 +17,28 @@ package feathers.examples.componentsExplorer.screens
 
 	[Event(name="complete",type="starling.events.Event")]
 
-	public class TextInputScreen extends Screen
+	public class TextInputScreen extends PanelScreen
 	{
 		public function TextInputScreen()
 		{
+			this.addEventListener(FeathersEventType.INITIALIZE, initializeHandler);
 		}
 
-		private var _header:Header;
 		private var _backButton:Button;
 		private var _input:TextInput;
 
-		override protected function initialize():void
+		protected function initializeHandler(event:Event):void
 		{
+			this.layout = new AnchorLayout();
+
 			this._input = new TextInput();
+			const inputLayoutData:AnchorLayoutData = new AnchorLayoutData();
+			inputLayoutData.horizontalCenter = 0;
+			inputLayoutData.verticalCenter = 0;
+			this._input.layoutData = inputLayoutData;
 			this.addChild(this._input);
 
-			this._header = new Header();
-			this._header.title = "Text Input";
-			this.addChild(this._header);
+			this.headerProperties.title = "Text Input";
 
 			if(!DeviceCapabilities.isTablet(Starling.current.nativeStage))
 			{
@@ -38,25 +46,14 @@ package feathers.examples.componentsExplorer.screens
 				this._backButton.label = "Back";
 				this._backButton.addEventListener(Event.TRIGGERED, backButton_triggeredHandler);
 
-				this._header.leftItems = new <DisplayObject>
+				this.headerProperties.leftItems = new <DisplayObject>
 				[
 					this._backButton
 				];
 			}
 
-
 			// handles the back hardware key on android
 			this.backButtonHandler = this.onBackButton;
-		}
-
-		override protected function draw():void
-		{
-			this._header.width = this.actualWidth;
-			this._header.validate();
-
-			this._input.validate();
-			this._input.x = (this.actualWidth - this._input.width) / 2;
-			this._input.y = this._header.height + (this.actualHeight - this._header.height - this._input.height) / 2;
 		}
 
 		private function onBackButton():void

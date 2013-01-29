@@ -3,8 +3,11 @@ package feathers.examples.componentsExplorer.screens
 	import feathers.controls.Button;
 	import feathers.controls.ButtonGroup;
 	import feathers.controls.Header;
-	import feathers.controls.Screen;
+	import feathers.controls.PanelScreen;
 	import feathers.data.ListCollection;
+	import feathers.events.FeathersEventType;
+	import feathers.layout.AnchorLayout;
+	import feathers.layout.AnchorLayoutData;
 	import feathers.system.DeviceCapabilities;
 
 	import starling.core.Starling;
@@ -13,18 +16,20 @@ package feathers.examples.componentsExplorer.screens
 
 	[Event(name="complete",type="starling.events.Event")]
 
-	public class ButtonGroupScreen extends Screen
+	public class ButtonGroupScreen extends PanelScreen
 	{
 		public function ButtonGroupScreen()
 		{
+			this.addEventListener(FeathersEventType.INITIALIZE, initializeHandler);
 		}
 
-		private var _header:Header;
 		private var _backButton:Button;
 		private var _buttonGroup:ButtonGroup;
 
-		override protected function initialize():void
+		protected function initializeHandler(event:Event):void
 		{
+			this.layout = new AnchorLayout();
+
 			this._buttonGroup = new ButtonGroup();
 			this._buttonGroup.dataProvider = new ListCollection(
 			[
@@ -33,11 +38,13 @@ package feathers.examples.componentsExplorer.screens
 				{ label: "Three", triggered: button_triggeredHandler },
 				{ label: "Four", triggered: button_triggeredHandler },
 			]);
+			const buttonGroupLayoutData:AnchorLayoutData = new AnchorLayoutData();
+			buttonGroupLayoutData.horizontalCenter = 0;
+			buttonGroupLayoutData.verticalCenter = 0;
+			this._buttonGroup.layoutData = buttonGroupLayoutData;
 			this.addChild(this._buttonGroup);
 
-			this._header = new Header();
-			this._header.title = "Button Group";
-			this.addChild(this._header);
+			this.headerProperties.title = "Button Group";
 
 			if(!DeviceCapabilities.isTablet(Starling.current.nativeStage))
 			{
@@ -45,7 +52,7 @@ package feathers.examples.componentsExplorer.screens
 				this._backButton.label = "Back";
 				this._backButton.addEventListener(Event.TRIGGERED, backButton_triggeredHandler);
 
-				this._header.leftItems = new <DisplayObject>
+				this.headerProperties.leftItems = new <DisplayObject>
 				[
 					this._backButton
 				];
@@ -53,16 +60,6 @@ package feathers.examples.componentsExplorer.screens
 
 			// handles the back hardware key on android
 			this.backButtonHandler = this.onBackButton;
-		}
-
-		override protected function draw():void
-		{
-			this._header.width = this.actualWidth;
-			this._header.validate();
-
-			this._buttonGroup.validate();
-			this._buttonGroup.x = (this.actualWidth - this._buttonGroup.width) / 2;
-			this._buttonGroup.y = this._header.height + (this.actualHeight - this._header.height - this._buttonGroup.height) / 2;
 		}
 
 		private function onBackButton():void

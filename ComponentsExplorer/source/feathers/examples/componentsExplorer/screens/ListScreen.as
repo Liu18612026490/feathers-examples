@@ -1,39 +1,42 @@
 package feathers.examples.componentsExplorer.screens
 {
 	import feathers.controls.Button;
-	import feathers.controls.Header;
 	import feathers.controls.List;
-	import feathers.controls.Screen;
+	import feathers.controls.PanelScreen;
 	import feathers.data.ListCollection;
+	import feathers.events.FeathersEventType;
 	import feathers.examples.componentsExplorer.data.ListSettings;
+	import feathers.layout.AnchorLayout;
+	import feathers.layout.AnchorLayoutData;
 	import feathers.system.DeviceCapabilities;
 
 	import starling.core.Starling;
-
 	import starling.display.DisplayObject;
 	import starling.events.Event;
 
 	[Event(name="complete",type="starling.events.Event")]
 	[Event(name="showSettings",type="starling.events.Event")]
 
-	public class ListScreen extends Screen
+	public class ListScreen extends PanelScreen
 	{
 		public static const SHOW_SETTINGS:String = "showSettings";
 
 		public function ListScreen()
 		{
 			super();
+			this.addEventListener(FeathersEventType.INITIALIZE, initializeHandler);
 		}
 
 		public var settings:ListSettings;
 
 		private var _list:List;
-		private var _header:Header;
 		private var _backButton:Button;
 		private var _settingsButton:Button;
 		
-		override protected function initialize():void
+		protected function initializeHandler(event:Event):void
 		{
+			this.layout = new AnchorLayout();
+
 			var items:Array = [];
 			for(var i:int = 0; i < 150; i++)
 			{
@@ -49,11 +52,10 @@ package feathers.examples.componentsExplorer.screens
 			this._list.hasElasticEdges = this.settings.hasElasticEdges;
 			this._list.itemRendererProperties.labelField = "text";
 			this._list.addEventListener(Event.CHANGE, list_changeHandler);
-			this.addChildAt(this._list, 0);
+			this._list.layoutData = new AnchorLayoutData(0, 0, 0, 0);
+			this.addChild(this._list);
 
-			this._header = new Header();
-			this._header.title = "List";
-			this.addChild(this._header);
+			this.headerProperties.title = "List";
 
 			if(!DeviceCapabilities.isTablet(Starling.current.nativeStage))
 			{
@@ -61,7 +63,7 @@ package feathers.examples.componentsExplorer.screens
 				this._backButton.label = "Back";
 				this._backButton.addEventListener(Event.TRIGGERED, backButton_triggeredHandler);
 
-				this._header.leftItems = new <DisplayObject>
+				this.headerProperties.leftItems = new <DisplayObject>
 				[
 					this._backButton
 				];
@@ -71,23 +73,13 @@ package feathers.examples.componentsExplorer.screens
 			this._settingsButton.label = "Settings";
 			this._settingsButton.addEventListener(Event.TRIGGERED, settingsButton_triggeredHandler);
 
-			this._header.rightItems = new <DisplayObject>
+			this.headerProperties.rightItems = new <DisplayObject>
 			[
 				this._settingsButton
 			];
 			
 			// handles the back hardware key on android
 			this.backButtonHandler = this.onBackButton;
-		}
-		
-		override protected function draw():void
-		{
-			this._header.width = this.actualWidth;
-			this._header.validate();
-
-			this._list.y = this._header.height;
-			this._list.width = this.actualWidth;
-			this._list.height = this.actualHeight - this._list.y;
 		}
 		
 		private function onBackButton():void
