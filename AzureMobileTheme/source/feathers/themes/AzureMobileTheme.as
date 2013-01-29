@@ -34,6 +34,7 @@ package feathers.themes
 	import feathers.controls.Label;
 	import feathers.controls.List;
 	import feathers.controls.PageIndicator;
+	import feathers.controls.PanelScreen;
 	import feathers.controls.PickerList;
 	import feathers.controls.ProgressBar;
 	import feathers.controls.Radio;
@@ -352,6 +353,7 @@ package feathers.themes
 			StandardIcons.listDrillDownAccessoryTexture = this.atlas.getTexture("list-accessory-drill-down-icon");
 
 			this.setInitializerForClassAndSubclasses(Screen, screenInitializer);
+			this.setInitializerForClassAndSubclasses(PanelScreen, panelScreenInitializer);
 			this.setInitializerForClass(Label, labelInitializer);
 			this.setInitializerForClass(ScrollText, scrollTextInitializer);
 			this.setInitializerForClass(BitmapFontTextRenderer, itemRendererAccessoryLabelInitializer, BaseDefaultItemRenderer.DEFAULT_CHILD_NAME_ACCESSORY_LABEL);
@@ -413,6 +415,11 @@ package feathers.themes
 		}
 
 		protected function screenInitializer(screen:Screen):void
+		{
+			screen.originalDPI = this._originalDPI;
+		}
+
+		protected function panelScreenInitializer(screen:PanelScreen):void
 		{
 			screen.originalDPI = this._originalDPI;
 		}
