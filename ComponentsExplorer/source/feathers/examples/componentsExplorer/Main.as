@@ -7,6 +7,7 @@ package feathers.examples.componentsExplorer
 	import feathers.examples.componentsExplorer.data.GroupedListSettings;
 	import feathers.examples.componentsExplorer.data.ListSettings;
 	import feathers.examples.componentsExplorer.data.SliderSettings;
+	import feathers.examples.componentsExplorer.data.TextInputSettings;
 	import feathers.examples.componentsExplorer.screens.ButtonGroupScreen;
 	import feathers.examples.componentsExplorer.screens.ButtonScreen;
 	import feathers.examples.componentsExplorer.screens.ButtonSettingsScreen;
@@ -24,6 +25,7 @@ package feathers.examples.componentsExplorer
 	import feathers.examples.componentsExplorer.screens.SliderSettingsScreen;
 	import feathers.examples.componentsExplorer.screens.TabBarScreen;
 	import feathers.examples.componentsExplorer.screens.TextInputScreen;
+	import feathers.examples.componentsExplorer.screens.TextInputSettingsScreen;
 	import feathers.examples.componentsExplorer.screens.ToggleScreen;
 	import feathers.layout.AnchorLayout;
 	import feathers.layout.AnchorLayoutData;
@@ -55,6 +57,7 @@ package feathers.examples.componentsExplorer
 		private static const SLIDER_SETTINGS:String = "sliderSettings";
 		private static const TAB_BAR:String = "tabBar";
 		private static const TEXT_INPUT:String = "textInput";
+		private static const TEXT_INPUT_SETTINGS:String = "textInputSettings";
 		private static const TOGGLES:String = "toggles";
 
 		private static const MAIN_MENU_EVENTS:Object =
@@ -206,9 +209,21 @@ package feathers.examples.componentsExplorer
 				complete: MAIN_MENU
 			}));
 
+			const textInputSettings:TextInputSettings = new TextInputSettings();
 			this._navigator.addScreen(TEXT_INPUT, new ScreenNavigatorItem(TextInputScreen,
 			{
-				complete: MAIN_MENU
+				complete: MAIN_MENU,
+				showSettings: TEXT_INPUT_SETTINGS
+			},
+			{
+				settings: textInputSettings
+			}));
+			this._navigator.addScreen(TEXT_INPUT_SETTINGS, new ScreenNavigatorItem(TextInputSettingsScreen,
+			{
+				complete: TEXT_INPUT
+			},
+			{
+				settings: textInputSettings
 			}));
 
 			this._navigator.addScreen(PROGRESS_BAR, new ScreenNavigatorItem(ProgressBarScreen,
