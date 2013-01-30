@@ -54,7 +54,7 @@ package feathers.examples.helloWorld
 			//Feathers component that is added to the stage. you should always
 			//create a theme immediately when your app starts up to ensure that
 			//all components are properly skinned.
-			this.theme = new MetalWorksMobileTheme(this.stage);
+			this.theme = new MetalWorksMobileTheme();
 
 			//create a button and give it some text to display.
 			this.button = new Button();

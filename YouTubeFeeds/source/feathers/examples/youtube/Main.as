@@ -32,7 +32,7 @@ package feathers.examples.youtube
 
 		private function addedToStageHandler(event:Event):void
 		{
-			this._theme = new MetalWorksMobileTheme(this.stage);
+			this._theme = new MetalWorksMobileTheme();
 
 			this._model = new YouTubeModel();
 

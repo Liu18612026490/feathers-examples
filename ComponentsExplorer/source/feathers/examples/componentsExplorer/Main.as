@@ -31,7 +31,10 @@ package feathers.examples.componentsExplorer
 	import feathers.layout.AnchorLayoutData;
 	import feathers.motion.transitions.ScreenSlidingStackTransitionManager;
 	import feathers.system.DeviceCapabilities;
+	import feathers.themes.AeonDesktopTheme;
+	import feathers.themes.AzureMobileTheme;
 	import feathers.themes.MetalWorksMobileTheme;
+	import feathers.themes.MinimalMobileTheme;
 
 	import starling.core.Starling;
 	import starling.display.Sprite;
@@ -84,7 +87,7 @@ package feathers.examples.componentsExplorer
 			this.addEventListener(Event.REMOVED_FROM_STAGE, removedFromStageHandler);
 		}
 		
-		private var _theme:MetalWorksMobileTheme;
+		private var _theme:AeonDesktopTheme;
 		private var _container:ScrollContainer;
 		private var _navigator:ScreenNavigator;
 		private var _menu:MainMenuScreen;
@@ -98,7 +101,7 @@ package feathers.examples.componentsExplorer
 		
 		private function addedToStageHandler(event:Event):void
 		{
-			this._theme = new MetalWorksMobileTheme(this.stage);
+			this._theme = new AeonDesktopTheme();
 			
 			this._navigator = new ScreenNavigator();
 

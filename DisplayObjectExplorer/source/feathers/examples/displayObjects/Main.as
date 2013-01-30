@@ -68,7 +68,7 @@ package feathers.examples.displayObjects
 		{
 			this.stage.addEventListener(ResizeEvent.RESIZE, stage_resizeHandler);
 
-			this._theme = new MetalWorksMobileTheme(this.stage);
+			this._theme = new MetalWorksMobileTheme();
 			this._theme.setInitializerForClass(Button, rightGripInitializer, "right-grip");
 			this._theme.setInitializerForClass(Button, bottomGripInitializer, "bottom-grip");
 
