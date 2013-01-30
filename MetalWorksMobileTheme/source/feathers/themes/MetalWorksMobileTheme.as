@@ -130,9 +130,13 @@ package feathers.themes
 			return quad;
 		}
 
-		public function MetalWorksMobileTheme(root:DisplayObjectContainer, scaleToDPI:Boolean = true)
+		public function MetalWorksMobileTheme(container:DisplayObjectContainer = null, scaleToDPI:Boolean = true)
 		{
-			super(root)
+			if(!container)
+			{
+				container = Starling.current.stage;
+			}
+			super(container)
 			this._scaleToDPI = scaleToDPI;
 			this.initialize();
 		}

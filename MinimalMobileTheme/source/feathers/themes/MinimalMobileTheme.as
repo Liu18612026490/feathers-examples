@@ -121,17 +121,21 @@ package feathers.themes
 			return new StageTextTextEditor();
 		}
 
-		public function MinimalMobileTheme(root:DisplayObjectContainer, scaleToDPI:Boolean = true)
+		public function MinimalMobileTheme(container:DisplayObjectContainer = null, scaleToDPI:Boolean = true)
 		{
-			super(root);
-			Starling.current.nativeStage.color = BACKGROUND_COLOR;
-			if(root.stage)
+			if(!container)
 			{
-				root.stage.color = BACKGROUND_COLOR;
+				container = Starling.current.stage;
+			}
+			super(container);
+			Starling.current.nativeStage.color = BACKGROUND_COLOR;
+			if(this.root.stage)
+			{
+				this.root.stage.color = BACKGROUND_COLOR;
 			}
 			else
 			{
-				root.addEventListener(Event.ADDED_TO_STAGE, root_addedToStageHandler);
+				this.root.addEventListener(Event.ADDED_TO_STAGE, root_addedToStageHandler);
 			}
 			this._scaleToDPI = scaleToDPI;
 			this.initialize();

@@ -130,17 +130,21 @@ package feathers.themes
 			return new TextFieldTextEditor();
 		}
 
-		public function AeonDesktopTheme(root:DisplayObjectContainer)
+		public function AeonDesktopTheme(container:DisplayObjectContainer = null)
 		{
-			super(root);
-			Starling.current.nativeStage.color = BACKGROUND_COLOR;
-			if(root.stage)
+			if(!container)
 			{
-				root.stage.color = BACKGROUND_COLOR;
+				container = Starling.current.stage;
+			}
+			super(container);
+			Starling.current.nativeStage.color = BACKGROUND_COLOR;
+			if(this.root.stage)
+			{
+				this.root.stage.color = BACKGROUND_COLOR;
 			}
 			else
 			{
-				root.addEventListener(Event.ADDED_TO_STAGE, root_addedToStageHandler);
+				this.root.addEventListener(Event.ADDED_TO_STAGE, root_addedToStageHandler);
 			}
 			this.initialize();
 		}
